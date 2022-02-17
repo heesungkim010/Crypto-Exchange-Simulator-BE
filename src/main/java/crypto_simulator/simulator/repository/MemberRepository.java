@@ -15,9 +15,9 @@ public class MemberRepository {
     private final EntityManager em;
 
     public void save(Member member){
-        //System.out.println(member.getId());
+        //System.out.println("before id : " + member.getId());
         em.persist(member);
-        //System.out.println(member.getId());
+        //System.out.println("after id : " + member.getId());
     }
 
 
@@ -25,7 +25,13 @@ public class MemberRepository {
         return em.find(Member.class, id);
     }
 
-    public List<Member> findByUserId(String userId){
+    public Member findByUserId(String userId){
+        return em.createQuery("select m from Member m where m.userId = :userId", Member.class)
+                .setParameter("userId", userId)
+                .getSingleResult();
+    }
+
+    public List<Member> findListByUserId(String userId){
         return em.createQuery("select m from Member m where m.userId = :userId", Member.class)
                 .setParameter("userId", userId)
                 .getResultList();

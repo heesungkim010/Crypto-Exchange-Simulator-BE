@@ -20,7 +20,7 @@ public class MemberService {
 
     @Transactional
     public Long join(Member member){
-        validateIfDuplicate(member);
+        checkDuplicate(member);
         memberRepository.save(member);
         return member.getId();
     }
@@ -29,12 +29,12 @@ public class MemberService {
         return memberRepository.findById(id);
     }
 
-    public List<Member> findByUserId(String UserId){
+    public Member findByUserId(String UserId){
         return memberRepository.findByUserId(UserId);
     }
 
-    private void validateIfDuplicate(Member member) {
-        List<Member> memberList = memberRepository.findByUserId(member.getUserId());
+    private void checkDuplicate(Member member) {
+        List<Member> memberList = memberRepository.findListByUserId(member.getUserId());
         if(!memberList.isEmpty()){
             throw new IllegalStateException("Already existing userId");
         }

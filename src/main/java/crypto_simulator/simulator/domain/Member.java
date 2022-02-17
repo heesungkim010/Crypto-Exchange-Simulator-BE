@@ -13,7 +13,6 @@ public class Member {
     @Id @GeneratedValue
     @Column(name = "member_id")
     private Long id;
-    private Long id2;
 
     //Account information
     private String userId;

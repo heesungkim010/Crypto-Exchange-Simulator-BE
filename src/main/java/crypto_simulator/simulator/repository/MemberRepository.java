@@ -31,7 +31,7 @@ public class MemberRepository {
                 .getSingleResult();
     }
 
-    public List<Member> findListByUserId(String userId){
+    public List<Member> findListByUserId(String userId) {
         return em.createQuery("select m from Member m where m.userId = :userId", Member.class)
                 .setParameter("userId", userId)
                 .getResultList();

@@ -1,8 +1,9 @@
 spring:
   datasource:
-    url: jdbc:h2:tcp://localhost/~/simulator
-    username: sa
-    driver-class-name: org.h2.Driver
+    url: jdbc:mysql://127.0.0.1:3306/simulator_1
+    username: simulator_1
+    password: user1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     hibernate:

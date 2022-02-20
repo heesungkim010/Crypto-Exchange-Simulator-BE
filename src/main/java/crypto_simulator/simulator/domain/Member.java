@@ -9,9 +9,15 @@ import java.util.List;
 
 @Entity
 @Getter @Setter
+@SequenceGenerator(
+        name = "MEMBER_SEQ_GENERATOR",
+        sequenceName = "MEMBER_SEQ",
+        initialValue = 1,
+        allocationSize =50 )
 public class Member {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE,
+                    generator = "MEMBER_SEQ_GENERATOR")
     @Column(name = "member_id")
     private Long id;
 
@@ -25,10 +31,10 @@ public class Member {
     private double curOrderedMoney;
     private double positionedAssetInMoney;
 
-    @OneToMany(mappedBy = "memberInOrders")
-    private List<Orders> orders = new ArrayList<>();
+    @OneToMany(mappedBy = "memberInFilledOrders")
+    private List<FilledOrders> filledOrders = new ArrayList<>();
 
-    @OneToMany(mappedBy = "memberInCurPosition")
-    private List<CurPosition> curPositions = new ArrayList<>();
+    @OneToMany(mappedBy = "memberInPosition")
+    private List<Position> Positions = new ArrayList<>();
 
 }

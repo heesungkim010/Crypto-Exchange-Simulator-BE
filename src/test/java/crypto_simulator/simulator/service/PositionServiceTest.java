@@ -1,6 +1,8 @@
 package crypto_simulator.simulator.service;
 
 import crypto_simulator.simulator.domain.Member;
+import crypto_simulator.simulator.domain.Position;
+import crypto_simulator.simulator.domain.Ticker;
 import crypto_simulator.simulator.repository.MemberRepository;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
@@ -12,42 +14,29 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
 
+import static org.junit.Assert.*;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional
-public class MemberServiceTest {
+public class PositionServiceTest {
 
+    @Autowired PositionService positionService;
     @Autowired MemberService memberService;
 
     @Test
     @Rollback(value = false)
-    public void registerAndFindMember() {
+    public void initAndFindMemberIdTicker() {
         //given
         Member member = new Member();
         member.setUserId("user1");
 
         //when
         Long savedId = memberService.join(member);
+        positionService.initiatePosition(member);
+        Position found_position = positionService.findByMemberIdTicker(savedId, Ticker.BTCUSD);
 
         //then
-        Assertions.assertEquals(member, memberService.findByUserId("user1"));
-        Assertions.assertEquals(member, memberService.findById(1L));
+        Assertions.assertEquals(found_position.getMemberInPosition(), member);
     }
-
-    @Test(expected = IllegalStateException.class)
-    public void DupRegister() {
-        //given
-        Member member1 = new Member();
-        member1.setUserId("user1");
-        Member member2 = new Member();
-        member2.setUserId("user1");
-
-        //when
-        Long savedId = memberService.join(member1);
-        Long savedId2 = memberService.join(member2);
-
-        //then
-        Assertions.fail("needs to fail");
-    }
-
 }

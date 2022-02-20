@@ -20,7 +20,6 @@ public class MemberRepository {
         //System.out.println("after id : " + member.getId());
     }
 
-
     public Member findById(Long id){
         return em.find(Member.class, id);
     }

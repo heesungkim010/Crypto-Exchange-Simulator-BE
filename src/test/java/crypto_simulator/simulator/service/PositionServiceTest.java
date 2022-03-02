@@ -24,6 +24,7 @@ public class PositionServiceTest {
     @Autowired PositionService positionService;
     @Autowired MemberService memberService;
 
+    /*
     @Test
     @Rollback(value = false)
     public void initAndFindMemberIdTicker() {
@@ -39,4 +40,6 @@ public class PositionServiceTest {
         //then
         Assertions.assertEquals(found_position.getMemberInPosition(), member);
     }
+    */
+
 }

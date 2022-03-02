@@ -1,5 +1,6 @@
 package crypto_simulator.simulator.domain;
 
+import crypto_simulator.simulator.NewOrder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -45,4 +46,25 @@ public class Position {
 
         return position;
     }
+
+    public void updatePositionFilled(NewOrder newOrder){
+        //TODO : RESTART FROM HERE
+
+
+        /*
+            @Enumerated(EnumType.STRING)
+    private Ticker ticker;
+
+    private double amount;
+
+    private double avgBoughtPrice;
+    private double availableAmount;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member memberInPosition;
+
+         */
+    }
+
 }

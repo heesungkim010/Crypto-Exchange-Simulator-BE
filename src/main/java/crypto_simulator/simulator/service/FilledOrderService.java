@@ -1,5 +1,6 @@
 package crypto_simulator.simulator.service;
 
+import crypto_simulator.simulator.NewOrder;
 import crypto_simulator.simulator.domain.*;
 import crypto_simulator.simulator.repository.FilledOrderRepository;
 import crypto_simulator.simulator.repository.PositionRepository;
@@ -19,11 +20,11 @@ public class FilledOrderService {
     private final FilledOrderRepository filledOrderRepository;
 
     @Transactional
-    public void saveFilledOrder(Member member){
-        //save filled order when filled.
+    public void saveFilledOrder(NewOrder newOrder, Member member){
+        // save filled order when filled.
         // 1. create FilledOrder object : domain FilledOrder
         // 2. save the object. : respository FilledOrderRepository
-        FilledOrders filledOrders = createFilledOrder(Ticker.BTCUSD);
+        FilledOrders filledOrders = createFilledOrder(newOrder, member);
         filledOrders.setMemberInFilledOrders(member);
         filledOrderRepository.saveFilledOrder(filledOrders);
         //TODO : check if (1) using cascade or

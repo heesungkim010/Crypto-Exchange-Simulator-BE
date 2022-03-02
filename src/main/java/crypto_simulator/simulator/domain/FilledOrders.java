@@ -1,5 +1,6 @@
 package crypto_simulator.simulator.domain;
 
+import crypto_simulator.simulator.NewOrder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,6 +31,7 @@ public class FilledOrders {
     @Enumerated(EnumType.STRING)
     private OrderType filledOrderType;
 
+    private Long newOrderId;
     private double price;
     private double amount;
     private double feeRate;
@@ -41,10 +43,23 @@ public class FilledOrders {
     @JoinColumn(name = "member_id")
     private Member memberInFilledOrders;
 
-    public static FilledOrders createFilledOrder(Ticker ticker){
-        //TODO: get parameters by DTO : LATER!
+    public static FilledOrders createFilledOrder(NewOrder newOrder, Member newMember){
+        //TODO: think of another way of cloning object without one~two varible
         FilledOrders filledOrder = new FilledOrders();
-        filledOrder.setTicker(ticker);
+
+        filledOrder.setTicker(newOrder.getTicker());
+        filledOrder.setFilledOrderStatus(newOrder.getNewOrderStatus());
+        filledOrder.setFilledOrderType(newOrder.getNewOrderType());
+        filledOrder.setNewOrderId(newOrder.getId());
+
+        filledOrder.setPrice(newOrder.getPrice());
+        filledOrder.setAmount(newOrder.getAmount());
+        filledOrder.setFeeRate(newOrder.getFeeRate());
+        filledOrder.setFee(newOrder.getFee());
+        filledOrder.setMoneyToSpend(newOrder.getMoneyToSpend());
+        filledOrder.setFilledOrderDate(newOrder.getOpenedOrderDate());
+
+        filledOrder.setMemberInFilledOrders(newMember);
 
         return filledOrder;
     }

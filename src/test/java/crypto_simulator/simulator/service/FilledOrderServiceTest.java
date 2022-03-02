@@ -1,9 +1,7 @@
 package crypto_simulator.simulator.service;
 
-import crypto_simulator.simulator.domain.FilledOrders;
-import crypto_simulator.simulator.domain.Member;
-import crypto_simulator.simulator.domain.Position;
-import crypto_simulator.simulator.domain.Ticker;
+import crypto_simulator.simulator.NewOrder;
+import crypto_simulator.simulator.domain.*;
 import crypto_simulator.simulator.repository.PositionRepository;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
@@ -16,6 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -37,8 +36,10 @@ public class FilledOrderServiceTest {
         member.setUserId("user1");
         Long savedId = memberService.join(member);
         positionService.initiatePosition(member);
+        NewOrder newOrder = new NewOrder(1L, Ticker.BTCUSD, OrderStatus.OPEN, OrderType.BUY,
+                40000, 10, 0.1, 20, 90000, LocalDateTime.now(),1L);
 
-        filledOrderService.saveFilledOrder(member);
+        filledOrderService.saveFilledOrder(newOrder, member);
 
         //when
         List<FilledOrders> filledOrdersList = filledOrderService.findByMember(member);

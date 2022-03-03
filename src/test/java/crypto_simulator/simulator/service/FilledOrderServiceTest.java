@@ -34,12 +34,22 @@ public class FilledOrderServiceTest {
         //given
         Member member = new Member();
         member.setUserId("user1");
+        member.setUsuableMoney(100000);
+        member.setCurOrderedMoney(0);
         Long savedId = memberService.join(member);
-        positionService.initiatePosition(member);
+        positionService.initiatePosition(member); // finished registration
+
         NewOrder newOrder = new NewOrder(1L, Ticker.BTCUSD, OrderStatus.OPEN, OrderType.BUY,
-                40000, 10, 0.1, 20, 90000, LocalDateTime.now(),1L);
+                40000, 10, 0.1, 20, 90000, 0,LocalDateTime.now(),1L);
 
         filledOrderService.saveFilledOrder(newOrder, member);
+
+        member.updateUsdBalanceOpen(newOrder);
+        member.updateUsdBalanceFilled(newOrder);
+
+        Position position = positionService.findByMemberIdTicker(savedId, Ticker.BTCUSD);
+        position.updatePositionOpen(newOrder);
+        position.updatePositionFilled(newOrder);
 
         //when
         List<FilledOrders> filledOrdersList = filledOrderService.findByMember(member);

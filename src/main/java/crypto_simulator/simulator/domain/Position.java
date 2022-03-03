@@ -48,23 +48,31 @@ public class Position {
     }
 
     public void updatePositionFilled(NewOrder newOrder){
+        if (newOrder.getNewOrderType() == OrderType.BUY){
+            this.avgBoughtPrice = (this.avgBoughtPrice * this.amount
+                    + newOrder.getPrice() * newOrder.getAmount() )/(this.amount + newOrder.getAmount());
+            this.amount += newOrder.getAmount();
+            this.availableAmount += newOrder.getAmount();
+        }else{ // OrderType.SELL
+            this.amount -= newOrder.getAmount();
+            this.availableAmount -= newOrder.getAmount();
+        }
+    }
 
+    public void updatePositionOpen(NewOrder newOrder){
+        if (newOrder.getNewOrderType() == OrderType.BUY){
+            //nothing to do when buy
+        }else{ // OrderType.SELL
+            this.availableAmount -= newOrder.getAmount();
+        }
+    }
 
-
-        /*
-            @Enumerated(EnumType.STRING)
-    private Ticker ticker;
-
-    private double amount;
-
-    private double avgBoughtPrice;
-    private double availableAmount;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member memberInPosition;
-
-         */
+    public void updatePositionCancelled(NewOrder newOrder) {
+        if (newOrder.getNewOrderType() == OrderType.BUY) {
+            //nothing to do when buy
+        } else { // OrderType.SELL
+            this.availableAmount += newOrder.getAmount();
+        }
     }
 
 }

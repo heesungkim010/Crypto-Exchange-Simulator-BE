@@ -42,7 +42,12 @@ public class FilledOrderServiceTest {
         NewOrder newOrder = new NewOrder(1L, Ticker.BTCUSD, OrderStatus.OPEN, OrderType.BUY,
                 40000, 10, 0.1, 20, 90000, 0,LocalDateTime.now(),1L);
 
+
+        NewOrder newSellOrder = new NewOrder(1L, Ticker.BTCUSD, OrderStatus.OPEN, OrderType.SELL,
+                50000, 5, 0.1, 20, 0, 250000,LocalDateTime.now(),1L);
+
         filledOrderService.saveFilledOrder(newOrder, member);
+        filledOrderService.saveFilledOrder(newSellOrder, member);
 
         member.updateUsdBalanceOpen(newOrder);
         member.updateUsdBalanceFilled(newOrder);
@@ -50,12 +55,13 @@ public class FilledOrderServiceTest {
         Position position = positionService.findByMemberIdTicker(savedId, Ticker.BTCUSD);
         position.updatePositionOpen(newOrder);
         position.updatePositionFilled(newOrder);
+        position.updatePositionOpen(newSellOrder);
+        position.updatePositionFilled(newSellOrder);
 
         //when
         List<FilledOrders> filledOrdersList = filledOrderService.findByMember(member);
 
         //then
-        Assertions.assertEquals(filledOrdersList.size(), 1);
+        Assertions.assertEquals(filledOrdersList.size(), 2);
     }
-
 }

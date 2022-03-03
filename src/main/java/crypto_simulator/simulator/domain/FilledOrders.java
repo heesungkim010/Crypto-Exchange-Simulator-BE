@@ -37,6 +37,7 @@ public class FilledOrders {
     private double feeRate;
     private double fee;
     private double moneyToSpend;
+    private double moneyToGet;
     private LocalDateTime filledOrderDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -57,6 +58,7 @@ public class FilledOrders {
         filledOrder.setFeeRate(newOrder.getFeeRate());
         filledOrder.setFee(newOrder.getFee());
         filledOrder.setMoneyToSpend(newOrder.getMoneyToSpend());
+        filledOrder.setMoneyToGet(newOrder.getMoneyToGet());
         filledOrder.setFilledOrderDate(newOrder.getOpenedOrderDate());
 
         filledOrder.setMemberInFilledOrders(newMember);

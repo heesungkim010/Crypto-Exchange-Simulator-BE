@@ -27,11 +27,12 @@ public class NewOrder {
     private double feeRate;
     private double fee;
     private double moneyToSpend;
+    private double moneyToGet;
     private LocalDateTime openedOrderDate;
 
     private Long memberId;
 
-    public NewOrder(Long id, Ticker ticker, OrderStatus filledOrderStatus, OrderType filledOrderType, double price, double amount, double feeRate, double fee, double moneyToSpend, LocalDateTime openedOrderDate, Long memberId) {
+    public NewOrder(Long id, Ticker ticker, OrderStatus filledOrderStatus, OrderType filledOrderType, double price, double amount, double feeRate, double fee, double moneyToSpend, double moneyToGet, LocalDateTime openedOrderDate, Long memberId) {
         this.id = id;
         this.ticker = ticker;
         this.newOrderStatus = filledOrderStatus;
@@ -41,6 +42,7 @@ public class NewOrder {
         this.feeRate = feeRate;
         this.fee = fee;
         this.moneyToSpend = moneyToSpend;
+        this.moneyToGet = moneyToGet;
         this.openedOrderDate = openedOrderDate;
         this.memberId = memberId;
     }

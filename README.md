@@ -33,7 +33,7 @@ However, this exchange simulator project does not use orderbook to match the ord
 
   I can get the price information from the external exchanges by 2 methods. One is HTTP and the other is Web Socket. As the price information needs a real-time communication, I used Web Socket to get the price information.
 
-  Once I get the real-time price and the open orders of users, matching engine can decide whether the orders would be filled or not. I used a hash table shown as below(key-price, value-a list of orders at the price). Once the price reaches at a certain value, the matching engine can fill the orders in the lists
+  Once I get the real-time price and the open orders of users, matching engine can decide whether the orders would be filled or not. I used a hash table shown as below(key-price, value-a list of orders at the price). Once the price reaches at a certain value, the matching engine can fill the orders in the lists.
 
 ![image](https://user-images.githubusercontent.com/63962555/156721278-33ecb70c-6d4c-48b6-a9ab-fadd4bcb409e.png)
 
@@ -61,7 +61,7 @@ The cons seem critical but I could not find any other methods yet. One alternati
  
 (Situation 1) : An user opens an order.
 
-(Situation 2] : The matching engine reaches the price of the list
+(Situation 2] : The matching engine reaches the price of the list.
 
 (Situation 3]) : An user cancels an order.
 

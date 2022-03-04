@@ -7,7 +7,7 @@ This is a prototype. This does not use multiple servers, security(authentificati
 
 ## Challenges And My Solution
 
-The followings are the challenges I got and my solutions in this project.
+The followings are the challenges I got in this project and my solutions.
 
 ## Index
 

@@ -35,7 +35,7 @@ However, this exchange simulator project does not use orderbook to match the ord
 
   Once I get the real-time price and the open orders of users, matching engine can decide whether the orders would be filled or not. I used a hash table shown as below(key-price, value-a list of orders at the price). Once the price reaches at a certain value, the matching engine can fill the orders in the lists
 
-![image](https://user-images.githubusercontent.com/63962555/156719744-2a905259-ba83-48f7-bb6a-433404745456.png)
+![image](https://user-images.githubusercontent.com/63962555/156721175-01e77eb7-81a7-403f-a865-ac71eec13b3c.png)
 
 ### [Challenge #2] How to safely cancel the open orders.(Matching engine)
 As the price can change very quickly, there could be an unsafe situation as follows:  

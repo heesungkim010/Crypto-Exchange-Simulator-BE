@@ -4,11 +4,12 @@ Simulates Crypto Trading Exchange System.
 
 This is a prototype. This does not use multiple servers, security(authentification, verification).
 
-[Challenges And My Solutions]
+
+ - Challenges And My Solution
 
 The followings are the challenges I got and my solutions in this project.
 
-[Index]
+- Index
 
 [Challenge #1] How to implement Matching Engine and get the price information.
 
@@ -29,6 +30,7 @@ Therefore, I need to get the price information from the external exchanges in th
 
 
 [Solution]
+
 I can get the price information from the external exchanges by 2 methods. One is HTTP and the other is Web Socket. As the price information needs a real-time communication, I used Web Socket to get the price information.
 
 Once I get the real-time price and the open orders of users, matching engine can decide whether the orders would be filled or not. I used a hash table shown as below(key-price, value-a list of orders at the price). Once the price reaches at a certain value, the matching engine can fill the orders in the lists

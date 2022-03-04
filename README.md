@@ -5,23 +5,23 @@ Simulates Crypto Trading Exchange System.
 This is a prototype. This does not use multiple servers, security(authentification, verification).
 
 
- - Challenges And My Solution
+#Challenges And My Solution
 
 The followings are the challenges I got and my solutions in this project.
 
-- Index
+##Index
 
-[Challenge #1] How to implement Matching Engine and get the price information.
+##[Challenge #1] How to implement Matching Engine and get the price information.
 
-[Challenge #2] How to safely cancel the open orders.(Matching engine)
+##[Challenge #2] How to safely cancel the open orders.(Matching engine)
 
-[Challenge #3] How to quickly open/cancel the orders. (Matching engine)
+##[Challenge #3] How to quickly open/cancel the orders. (Matching engine)
 
-[Challenge #4] How to send price information from the back-end server to the front-end server.
+##[Challenge #4] How to send price information from the back-end server to the front-end server.
 
-[Challenge #5] Overall system design, DB design, and Spring framework
+##[Challenge #5] Overall system design, DB design, and Spring framework
 
-[Challenge #1] How to implement Matching Engine and get the price information.
+##[Challenge #1] How to implement Matching Engine and get the price information.
 
   A Matching engine is a system that matches the order of two sides(buy and sell) and makes a deal for both sides. Matching engines in exchanges use orderbooks.
 However, this exchange simulator project does not use orderbook to match the orders. Because the exchage simulator aims to use the price information in the real world, not the orderbook in a small simulator which lacks of volume.
@@ -29,7 +29,7 @@ However, this exchange simulator project does not use orderbook to match the ord
 Therefore, I need to get the price information from the external exchanges in the real world, and use that information for the matching engines directly.
 
 
-[Solution]
+##[Solution]
 
 I can get the price information from the external exchanges by 2 methods. One is HTTP and the other is Web Socket. As the price information needs a real-time communication, I used Web Socket to get the price information.
 

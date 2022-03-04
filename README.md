@@ -4,8 +4,11 @@ Simulates Crypto Trading Exchange System.
 
 This is a prototype. This does not use multiple servers, security(authentification, verification).
 
+## A. System Design Overview
 
-## Challenges And My Solution
+## B. Database Design
+
+## C. Challenges And My Solution
 
 The followings are the challenges I got in this project and my solutions.
 

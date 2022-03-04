@@ -5,8 +5,11 @@ import java.io.IOException;
 import java.net.URI;
 
 @ClientEndpoint
-//The ClientEndpoint annotation a class level annotation is used to denote that a POJO is a web socket client and can be deployed as such.
-//https://javadoc.io/doc/javax.websocket/javax.websocket-api/latest/index.html
+
+/*
+The ClientEndpoint annotation a class level annotation is used to denote that a POJO is a web socket client and can be deployed as such.
+https://javadoc.io/doc/javax.websocket/javax.websocket-api/latest/index.html
+*/
 public class WebSocketClient {
 
     public String SocketIp = "stream.binance.com";

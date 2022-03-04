@@ -49,7 +49,8 @@ In this situation, there exists a mutual exclusion problem. Because the matching
 ### [Solution]
 The simplest way to solve this problem is to lock and unlock on the lists of orders at the given prices. For example, in the situation above, the matching engine can lock on the lists at certain prices when the matching engine tries to fill or cancel the order, and unlock after filling or canceling the order. 
 
-pros) Safe to order/cancel the orders 
+pros) Safe to order/cancel the orders. 
+
 cons) Overhead and delay caused by locking/unlocking.
 
 The cons seem critical but I could not find any other methods yet. One alternative I was thinking of is that once the matching engine gets the “cancel the order” request, the request waits at the router which is right after the matching engine. And then cancel the order if the incoming order corresponds to the “cancel the order” request. But this cannot be implemented when using the orderbooks as real world exchanges do and had some other issues. So I used the locking/unlocking method.

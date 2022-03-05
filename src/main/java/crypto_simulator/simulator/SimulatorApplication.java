@@ -1,6 +1,6 @@
 package crypto_simulator.simulator;
 
-import crypto_simulator.simulator.matching_engine.PriceInfoReceiver;
+import crypto_simulator.simulator.matching_engine.ExternalPriceInfoReceiver;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -11,8 +11,8 @@ public class SimulatorApplication {
 
 	public static void main(String[] args) throws URISyntaxException, InterruptedException {
 		SpringApplication.run(SimulatorApplication.class, args);
-		PriceInfoReceiver priceInfoReceiverBTC = new PriceInfoReceiver("btc");
-		PriceInfoReceiver priceInfoReceiverETH = new PriceInfoReceiver("eth");
+		ExternalPriceInfoReceiver priceInfoReceiverBTC = new ExternalPriceInfoReceiver("btc");
+		ExternalPriceInfoReceiver priceInfoReceiverETH = new ExternalPriceInfoReceiver("eth");
 		//testEndpointClient.close();
 	}
 }

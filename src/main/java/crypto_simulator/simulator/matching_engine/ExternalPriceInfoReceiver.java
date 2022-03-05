@@ -10,7 +10,7 @@ import java.net.URI;
 The ClientEndpoint annotation a class level annotation is used to denote that a POJO is a web socket client and can be deployed as such.
 https://javadoc.io/doc/javax.websocket/javax.websocket-api/latest/index.html
 */
-public class PriceInfoReceiver {
+public class ExternalPriceInfoReceiver {
 
     private String SocketIp = "stream.binance.com";
     private String SocketPort = "9443";
@@ -21,7 +21,7 @@ public class PriceInfoReceiver {
 
     Session userSession = null;
 
-    public PriceInfoReceiver(String ticker) {
+    public ExternalPriceInfoReceiver(String ticker) {
         try {
             WebSocketContainer container = ContainerProvider.getWebSocketContainer();
             container.connectToServer(this,

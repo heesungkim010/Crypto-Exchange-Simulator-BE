@@ -4,7 +4,7 @@ Simulates Crypto Trading Exchange System.
 
 This is a prototype. This does not use multiple servers, security(authentification, verification).
 
-# A. System Design Overview
+# A. System Design
 
 # B. Database Design
 

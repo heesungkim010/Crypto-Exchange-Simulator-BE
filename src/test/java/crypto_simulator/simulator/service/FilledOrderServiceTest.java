@@ -1,14 +1,12 @@
 package crypto_simulator.simulator.service;
 
-import crypto_simulator.simulator.NewOrder;
+import crypto_simulator.simulator.domain.NewOrder;
 import crypto_simulator.simulator.domain.*;
-import crypto_simulator.simulator.repository.PositionRepository;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.stereotype.Service;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -16,8 +14,6 @@ import javax.transaction.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 
 @RunWith(SpringRunner.class)

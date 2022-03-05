@@ -1,6 +1,5 @@
 package crypto_simulator.simulator.domain;
 
-import crypto_simulator.simulator.NewOrder;
 import lombok.Getter;
 import lombok.Setter;
 

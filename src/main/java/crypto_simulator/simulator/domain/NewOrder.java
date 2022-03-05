@@ -1,4 +1,4 @@
-package crypto_simulator.simulator;
+package crypto_simulator.simulator.domain;
 
 import crypto_simulator.simulator.domain.OrderStatus;
 import crypto_simulator.simulator.domain.OrderType;

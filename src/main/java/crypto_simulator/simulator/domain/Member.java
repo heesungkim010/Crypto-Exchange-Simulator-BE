@@ -1,6 +1,5 @@
 package crypto_simulator.simulator.domain;
 
-import crypto_simulator.simulator.NewOrder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -35,6 +34,13 @@ public class Member {
 
     @OneToMany(mappedBy = "memberInPosition")
     private List<Position> Positions = new ArrayList<>();
+
+    public Member(String userId, String password, double usuableMoney, double curOrderedMoney) {
+        this.userId = userId;
+        this.password = password;
+        this.usuableMoney = usuableMoney;
+        this.curOrderedMoney = curOrderedMoney;
+    }
 
     public void updateUsdBalanceFilled(NewOrder newOrder){
         if (newOrder.getNewOrderType() == OrderType.BUY){

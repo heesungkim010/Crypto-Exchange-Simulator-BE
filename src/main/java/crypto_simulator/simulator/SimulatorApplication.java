@@ -13,4 +13,5 @@ public class SimulatorApplication {
 		SpringApplication.run(SimulatorApplication.class, args);
 		AppConfig appConfig = new AppConfig();
 	}
+
 }

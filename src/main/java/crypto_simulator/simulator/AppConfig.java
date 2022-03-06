@@ -9,19 +9,21 @@ import java.util.stream.Collectors;
 
 public class AppConfig {
     //setting info. tickers.
-    private String[] tickerArray = {"btc", "eth"};
+    private String[] tickerArray = {"btc","eth"};
+    List<MatchingEngine> matchingEngineList = new ArrayList<MatchingEngine>();
 
 
+    public AppConfig() throws InterruptedException {
 
 
-    private List<String> tickerList = new ArrayList<String>();
-
-    public AppConfig() {
-        for (String ticker: tickerArray) {
-            tickerList.add(ticker);
+        for (String ticker : tickerArray){
+            matchingEngineList.add(new MatchingEngine(ticker));
         }
-        tickerList.stream()
-                .map( m-> new MatchingEngine(m))
-                .collect(Collectors.toList());
+        System.out.println("app config ends");
+
+        for (MatchingEngine me: matchingEngineList ) {
+            me.testBuffer();
+        }
     }
+
 }

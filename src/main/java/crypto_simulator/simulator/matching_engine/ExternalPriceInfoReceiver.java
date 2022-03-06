@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.net.URI;
 
 @ClientEndpoint
-
 /*
 The ClientEndpoint annotation a class level annotation is used to denote that a POJO is a web socket client and can be deployed as such.
 https://javadoc.io/doc/javax.websocket/javax.websocket-api/latest/index.html
@@ -16,13 +15,15 @@ public class ExternalPriceInfoReceiver {
     private String SocketPort = "9443";
     private String SocketPathFront = "/ws/"; //"/ws/btcusdt@kline_1m";
     private String SocketPathEnd = "usdt@kline_1m";
+    private CurrentPriceBuffer currentPriceBuffer;
     //binance websocket endpoint.
     //https://binance-docs.github.io/apidocs/spot/en/#websocket-market-streams
 
     Session userSession = null;
 
-    public ExternalPriceInfoReceiver(String ticker) {
+    public ExternalPriceInfoReceiver(String ticker, CurrentPriceBuffer buffer) {
         try {
+            this.currentPriceBuffer = buffer;
             WebSocketContainer container = ContainerProvider.getWebSocketContainer();
             container.connectToServer(this,
                     new URI("wss://"+SocketIp+":"+SocketPort+SocketPathFront+ticker+SocketPathEnd));
@@ -57,8 +58,12 @@ public class ExternalPriceInfoReceiver {
 
     @OnMessage
     public void receiveMessage(String message) throws IOException {
+        /*
+        TODO:
+        parse msg and set current price.
+        this.currentPriceBuffer.setCurPrice();
+        */
         System.out.println("### Message from the server : " + message);
-
     }
 
     //TODO : add  @OnError @OnClose

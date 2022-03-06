@@ -11,8 +11,6 @@ public class SimulatorApplication {
 
 	public static void main(String[] args) throws URISyntaxException, InterruptedException {
 		SpringApplication.run(SimulatorApplication.class, args);
-		ExternalPriceInfoReceiver priceInfoReceiverBTC = new ExternalPriceInfoReceiver("btc");
-		ExternalPriceInfoReceiver priceInfoReceiverETH = new ExternalPriceInfoReceiver("eth");
-		//testEndpointClient.close();
+		AppConfig appConfig = new AppConfig();
 	}
 }

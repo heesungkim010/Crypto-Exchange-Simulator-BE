@@ -17,12 +17,8 @@ public class MatchingEngine {
     // TODO : init and re-init every 12 hours(because of binance websocket limitation rules)
     //       re-init when websocket error
 
-    public void testBuffer() throws InterruptedException {
-        while(true){
-            System.out.println("===testBuffer=== ticker : "+ this.ticker);
-            System.out.println(currentPriceBuffer.getTicker());
-            System.out.println(currentPriceBuffer.getCurPrice());
-            Thread.sleep(1000);
-        }
-    }
+    // currentPriceBuffer.getBestBidPrice()
+    // currentPriceBuffer.getBestAskPrice()
+
+
 }

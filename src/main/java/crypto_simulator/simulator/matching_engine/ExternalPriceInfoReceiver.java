@@ -58,7 +58,6 @@ public class ExternalPriceInfoReceiver {
             System.out.println("===Websocket closed===");
         }
     }
-
     /* no need to send msg from receiver
     public void sendMessage(String message) {
         System.out.println("sendMessage : " + message);
@@ -74,27 +73,16 @@ public class ExternalPriceInfoReceiver {
         */
         //PriceInfo priceInfo = objectMapper.readValue(message, PriceInfo.class);
 
-        currentPriceBuffer.setCurPrice(getCurPrice(message));
-    }
-
-    public double getCurPrice(String jsonMessage){
-        String[] tokens = jsonMessage.split(",");
+        //parse the received message
+        String[] tokens = message.split(",");
         String bestBid = tokens[2].split(":")[1].replaceAll("\"", "");
-        System.out.println(bestBid);
+        String bestAsk = tokens[4].split(":")[1].replaceAll("\"", "");
 
         double bestBidPrice = Double.parseDouble(bestBid);
-        return bestBidPrice;
-        //{"u":17588451379,"s":"BTCUSDT","b":"39421.34000000","B":"0.11514000","a":"39421.35000000","A":"2.09849000"}
-        /*
-        {
-          "u":400900217,     // order book updateId
-          "s":"BNBUSDT",     // symbol
-          "b":"25.35190000", // best bid price
-          "B":"31.21000000", // best bid qty
-          "a":"25.36520000", // best ask price
-          "A":"40.66000000"  // best ask qty
-        }
-         */
+        double bestAskPrice = Double.parseDouble(bestAsk);
+
+        currentPriceBuffer.setBestBidPrice(bestBidPrice);
+        currentPriceBuffer.setBestAskPrice(bestAskPrice);
     }
 
     //TODO : add  @OnError @OnClose

@@ -6,7 +6,8 @@ import lombok.Setter;
 @Setter @Getter
 public class CurrentPriceBuffer {
     private String ticker;
-    private double curPrice;
+    private double bestBidPrice;
+    private double bestAskPrice;
 
     public CurrentPriceBuffer(String ticker) {
         this.ticker = ticker;

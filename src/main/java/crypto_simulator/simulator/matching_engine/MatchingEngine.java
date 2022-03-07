@@ -1,12 +1,17 @@
 package crypto_simulator.simulator.matching_engine;
 
+import crypto_simulator.simulator.domain.NewOrder;
 import lombok.RequiredArgsConstructor;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class MatchingEngine {
 
     private String ticker;
     private ExternalPriceInfoReceiver priceInfoReceiver;
     private CurrentPriceBuffer currentPriceBuffer;
+    Map<String, NewOrder> hashMap = new ConcurrentHashMap<>();
 
     public MatchingEngine(String ticker) throws InterruptedException {
         this.ticker = ticker;

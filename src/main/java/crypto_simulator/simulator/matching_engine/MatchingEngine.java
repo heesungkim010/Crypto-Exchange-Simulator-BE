@@ -11,17 +11,27 @@ public class MatchingEngine {
     private String ticker;
     private ExternalPriceInfoReceiver priceInfoReceiver;
     private CurrentPriceBuffer currentPriceBuffer;
-    private Long bestBidPrice;
-    private Long bestAskPrice;
-    private Semaphore mutex;
-    Map<String, Order> hashMap = new ConcurrentHashMap<>();
+    private double curBestBidPrice;
+    private double prevBestBidPrice;
+    private double curBestAskPrice;
+    private double prevBestAskPrice;
 
-    public MatchingEngine(String ticker) throws InterruptedException {
+    private Semaphore mutex;
+    private ReservedOrders[] priceIndexArray;
+    private double startIndexPrice;
+    private double endIndexPrice;
+    private double indexGapPrice;
+
+    public MatchingEngine(String ticker, double[] indexPriceList) throws InterruptedException {
         this.ticker = ticker;
         this.currentPriceBuffer = new CurrentPriceBuffer(ticker);
         this.priceInfoReceiver = new ExternalPriceInfoReceiver(ticker, this.currentPriceBuffer);
 
         this.mutex = new Semaphore(1, true);
+        this.priceIndexArray = new ReservedOrders[180000];
+        this.startIndexPrice = indexPriceList[0];
+        this.endIndexPrice = indexPriceList[1];
+        this.indexGapPrice = indexPriceList[2];
     }
 
     // TODO : init and re-init every 12 hours(because of binance websocket limitation rules)
@@ -38,7 +48,7 @@ public class MatchingEngine {
         unlock
         */
         mutex.acquire();
-        if(order.getPrice() >= this.bestBidPrice){ // fill order at market price(bestBidPrice)
+        if(order.getPrice() >= this.curBestBidPrice){ // fill order at market price(bestBidPrice)
 
         }else{ // reserve order at limit price
 
@@ -64,7 +74,7 @@ public class MatchingEngine {
         */
     }
 
-    public void updatePriceAndFillOrders(){
+    public void updatePriceAndFillOrders() throws InterruptedException {
         /*
         lock
         update bestBidPrice;
@@ -79,11 +89,16 @@ public class MatchingEngine {
         Fill the all order in the hash tables of the objects
         unlock
         */
+        mutex.acquire();
+        this.curBestAskPrice = currentPriceBuffer.getBestBidPrice();
+
+        mutex.release();
     }
 
     public void fillOrder(Order filledOrder){
         /*
         send the filled order to the data center by router
          */
+
     }
 }

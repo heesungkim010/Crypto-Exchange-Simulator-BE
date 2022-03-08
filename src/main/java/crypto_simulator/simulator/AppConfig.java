@@ -21,9 +21,6 @@ public class AppConfig {
         }
         System.out.println("app config ends");
 
-        for (MatchingEngine me: matchingEngineList ) {
-            me.testBuffer();
-        }
     }
 
 }

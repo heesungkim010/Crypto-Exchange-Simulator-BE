@@ -1,12 +1,12 @@
 package crypto_simulator.simulator.matching_engine;
 
-import crypto_simulator.simulator.domain.NewOrder;
+import crypto_simulator.simulator.domain.Orders;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class ReservedOrders {
-    private Map<Long, NewOrder> hashMap;
+    private Map<Long, Orders> hashMap;
 
     public ReservedOrders() {
         this.hashMap = new HashMap<>();

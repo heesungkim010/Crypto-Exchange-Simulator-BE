@@ -1,7 +1,6 @@
 package crypto_simulator.simulator.matching_engine;
 
-import crypto_simulator.simulator.domain.NewOrder;
-import lombok.RequiredArgsConstructor;
+import crypto_simulator.simulator.domain.Orders;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -15,7 +14,7 @@ public class MatchingEngine {
     private Long bestBidPrice;
     private Long bestAskPrice;
     private Semaphore mutex;
-    Map<String, NewOrder> hashMap = new ConcurrentHashMap<>();
+    Map<String, Orders> hashMap = new ConcurrentHashMap<>();
 
     public MatchingEngine(String ticker) throws InterruptedException {
         this.ticker = ticker;
@@ -31,7 +30,7 @@ public class MatchingEngine {
     // currentPriceBuffer.getBestBidPrice()
     // currentPriceBuffer.getBestAskPrice()
 
-    public void openOrder(NewOrder newOrder) throws InterruptedException {
+    public void openOrder(Orders orders) throws InterruptedException {
         /*
         lock
         check bestBidPrice;
@@ -39,7 +38,7 @@ public class MatchingEngine {
         unlock
         */
         mutex.acquire();
-        if(newOrder.getPrice() >= this.bestBidPrice){ // do market filled
+        if(orders.getPrice() >= this.bestBidPrice){ // fill order at market price(bestBidPrice)
 
         }else{ // reserve order at limit price
 
@@ -47,7 +46,7 @@ public class MatchingEngine {
         mutex.release();
     }
 
-    public void cancelOrder(NewOrder newOrder){
+    public void cancelOrder(Orders orders){
         /*
         get ReservedOrders object that matches newOrder's price
         lock
@@ -82,11 +81,9 @@ public class MatchingEngine {
         */
     }
 
-    public void fillOrder(NewOrder filledOrder){
+    public void fillOrder(Orders filledOrder){
         /*
         send the filled order to the data center by router
-
-
          */
     }
 }

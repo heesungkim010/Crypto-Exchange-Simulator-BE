@@ -46,31 +46,31 @@ public class Position {
         return position;
     }
 
-    public void updatePositionFilled(NewOrder newOrder){
-        if (newOrder.getNewOrderType() == OrderType.BUY){
+    public void updatePositionFilled(Orders orders){
+        if (orders.getNewOrderType() == OrderType.BUY){
             this.avgBoughtPrice = (this.avgBoughtPrice * this.amount
-                    + newOrder.getPrice() * newOrder.getAmount() )/(this.amount + newOrder.getAmount());
-            this.amount += newOrder.getAmount();
-            this.availableAmount += newOrder.getAmount();
+                    + orders.getPrice() * orders.getAmount() )/(this.amount + orders.getAmount());
+            this.amount += orders.getAmount();
+            this.availableAmount += orders.getAmount();
         }else{ // OrderType.SELL
-            this.amount -= newOrder.getAmount();
-            this.availableAmount -= newOrder.getAmount();
+            this.amount -= orders.getAmount();
+            this.availableAmount -= orders.getAmount();
         }
     }
 
-    public void updatePositionOpen(NewOrder newOrder){
-        if (newOrder.getNewOrderType() == OrderType.BUY){
+    public void updatePositionOpen(Orders orders){
+        if (orders.getNewOrderType() == OrderType.BUY){
             //nothing to do when buy
         }else{ // OrderType.SELL
-            this.availableAmount -= newOrder.getAmount();
+            this.availableAmount -= orders.getAmount();
         }
     }
 
-    public void updatePositionCancelled(NewOrder newOrder) {
-        if (newOrder.getNewOrderType() == OrderType.BUY) {
+    public void updatePositionCancelled(Orders orders) {
+        if (orders.getNewOrderType() == OrderType.BUY) {
             //nothing to do when buy
         } else { // OrderType.SELL
-            this.availableAmount += newOrder.getAmount();
+            this.availableAmount += orders.getAmount();
         }
     }
 

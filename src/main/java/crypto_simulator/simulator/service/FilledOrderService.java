@@ -1,6 +1,6 @@
 package crypto_simulator.simulator.service;
 
-import crypto_simulator.simulator.domain.NewOrder;
+import crypto_simulator.simulator.domain.Orders;
 import crypto_simulator.simulator.domain.*;
 import crypto_simulator.simulator.repository.FilledOrderRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,11 +18,11 @@ public class FilledOrderService {
     private final FilledOrderRepository filledOrderRepository;
 
     @Transactional
-    public void saveFilledOrder(NewOrder newOrder, Member member){
+    public void saveFilledOrder(Orders orders, Member member){
         // save filled order when filled.
         // 1. create FilledOrder object : domain FilledOrder
         // 2. save the object. : respository FilledOrderRepository
-        FilledOrders filledOrders = createFilledOrder(newOrder, member);
+        FilledOrders filledOrders = createFilledOrder(orders, member);
         filledOrders.setMemberInFilledOrders(member);
         filledOrderRepository.saveFilledOrder(filledOrders);
         //TODO : check if (1) using cascade or

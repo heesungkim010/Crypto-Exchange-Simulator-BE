@@ -1,20 +1,9 @@
 package crypto_simulator.simulator;
 
-import crypto_simulator.simulator.domain.NewOrder;
-import crypto_simulator.simulator.domain.OrderStatus;
-import crypto_simulator.simulator.domain.OrderType;
-import crypto_simulator.simulator.domain.Ticker;
-import crypto_simulator.simulator.matching_engine.ExternalPriceInfoReceiver;
-import crypto_simulator.simulator.matching_engine.ReservedOrders;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.net.URISyntaxException;
-import java.time.LocalDateTime;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import static java.lang.System.currentTimeMillis;
 
 @SpringBootApplication
 public class SimulatorApplication {

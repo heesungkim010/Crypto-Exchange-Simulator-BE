@@ -1,8 +1,5 @@
 package crypto_simulator.simulator.domain;
 
-import crypto_simulator.simulator.domain.OrderStatus;
-import crypto_simulator.simulator.domain.OrderType;
-import crypto_simulator.simulator.domain.Ticker;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,7 +7,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter @Setter
-public class NewOrder {
+public class Orders {
 
     private Long id; //TODO : check if it needs to make this unique or not.
 
@@ -32,7 +29,7 @@ public class NewOrder {
 
     private Long memberId;
 
-    public NewOrder(Long id, Ticker ticker, OrderStatus filledOrderStatus, OrderType filledOrderType, double price, double amount, double feeRate, double fee, double moneyToSpend, double moneyToGet, LocalDateTime openedOrderDate, Long memberId) {
+    public Orders(Long id, Ticker ticker, OrderStatus filledOrderStatus, OrderType filledOrderType, double price, double amount, double feeRate, double fee, double moneyToSpend, double moneyToGet, LocalDateTime openedOrderDate, Long memberId) {
         this.id = id;
         this.ticker = ticker;
         this.newOrderStatus = filledOrderStatus;

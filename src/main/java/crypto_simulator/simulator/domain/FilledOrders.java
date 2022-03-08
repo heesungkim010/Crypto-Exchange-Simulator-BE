@@ -43,22 +43,22 @@ public class FilledOrders {
     @JoinColumn(name = "member_id")
     private Member memberInFilledOrders;
 
-    public static FilledOrders createFilledOrder(NewOrder newOrder, Member newMember){
+    public static FilledOrders createFilledOrder(Orders orders, Member newMember){
         //TODO: think of another way of cloning object without one~two varible
         FilledOrders filledOrder = new FilledOrders();
 
-        filledOrder.setTicker(newOrder.getTicker());
-        filledOrder.setFilledOrderStatus(newOrder.getNewOrderStatus());
-        filledOrder.setFilledOrderType(newOrder.getNewOrderType());
-        filledOrder.setNewOrderId(newOrder.getId());
+        filledOrder.setTicker(orders.getTicker());
+        filledOrder.setFilledOrderStatus(orders.getNewOrderStatus());
+        filledOrder.setFilledOrderType(orders.getNewOrderType());
+        filledOrder.setNewOrderId(orders.getId());
 
-        filledOrder.setPrice(newOrder.getPrice());
-        filledOrder.setAmount(newOrder.getAmount());
-        filledOrder.setFeeRate(newOrder.getFeeRate());
-        filledOrder.setFee(newOrder.getFee());
-        filledOrder.setMoneyToSpend(newOrder.getMoneyToSpend());
-        filledOrder.setMoneyToGet(newOrder.getMoneyToGet());
-        filledOrder.setFilledOrderDate(newOrder.getOpenedOrderDate());
+        filledOrder.setPrice(orders.getPrice());
+        filledOrder.setAmount(orders.getAmount());
+        filledOrder.setFeeRate(orders.getFeeRate());
+        filledOrder.setFee(orders.getFee());
+        filledOrder.setMoneyToSpend(orders.getMoneyToSpend());
+        filledOrder.setMoneyToGet(orders.getMoneyToGet());
+        filledOrder.setFilledOrderDate(orders.getOpenedOrderDate());
 
         filledOrder.setMemberInFilledOrders(newMember);
 

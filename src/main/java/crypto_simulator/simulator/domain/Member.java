@@ -42,27 +42,27 @@ public class Member {
         this.curOrderedMoney = curOrderedMoney;
     }
 
-    public void updateUsdBalanceFilled(NewOrder newOrder){
-        if (newOrder.getNewOrderType() == OrderType.BUY){
-            this.curOrderedMoney -= newOrder.getMoneyToSpend();
+    public void updateUsdBalanceFilled(Orders orders){
+        if (orders.getNewOrderType() == OrderType.BUY){
+            this.curOrderedMoney -= orders.getMoneyToSpend();
         }else{ // OrderType.SELL
-            this.usuableMoney -= newOrder.getMoneyToGet();
+            this.usuableMoney -= orders.getMoneyToGet();
         }
     }
 
-    public void updateUsdBalanceOpen(NewOrder newOrder){
-        if (newOrder.getNewOrderType() == OrderType.BUY){
-            this.usuableMoney -= newOrder.getMoneyToSpend();
-            this.curOrderedMoney += newOrder.getMoneyToSpend();
+    public void updateUsdBalanceOpen(Orders orders){
+        if (orders.getNewOrderType() == OrderType.BUY){
+            this.usuableMoney -= orders.getMoneyToSpend();
+            this.curOrderedMoney += orders.getMoneyToSpend();
         }else{ // OrderType.SELL
             //nothing to do in usd balance
         }
     }
 
-    public void updateUsdBalanceCancelled(NewOrder newOrder){
-        if (newOrder.getNewOrderType() == OrderType.BUY){
-            this.usuableMoney += newOrder.getMoneyToSpend();
-            this.curOrderedMoney -= newOrder.getMoneyToSpend();
+    public void updateUsdBalanceCancelled(Orders orders){
+        if (orders.getNewOrderType() == OrderType.BUY){
+            this.usuableMoney += orders.getMoneyToSpend();
+            this.curOrderedMoney -= orders.getMoneyToSpend();
         }else{ // OrderType.SELL
 
         }

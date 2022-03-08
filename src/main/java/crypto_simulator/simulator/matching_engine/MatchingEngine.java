@@ -1,6 +1,6 @@
 package crypto_simulator.simulator.matching_engine;
 
-import crypto_simulator.simulator.domain.Orders;
+import crypto_simulator.simulator.domain.Order;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -14,7 +14,7 @@ public class MatchingEngine {
     private Long bestBidPrice;
     private Long bestAskPrice;
     private Semaphore mutex;
-    Map<String, Orders> hashMap = new ConcurrentHashMap<>();
+    Map<String, Order> hashMap = new ConcurrentHashMap<>();
 
     public MatchingEngine(String ticker) throws InterruptedException {
         this.ticker = ticker;
@@ -30,7 +30,7 @@ public class MatchingEngine {
     // currentPriceBuffer.getBestBidPrice()
     // currentPriceBuffer.getBestAskPrice()
 
-    public void openOrder(Orders orders) throws InterruptedException {
+    public void openOrder(Order order) throws InterruptedException {
         /*
         lock
         check bestBidPrice;
@@ -38,7 +38,7 @@ public class MatchingEngine {
         unlock
         */
         mutex.acquire();
-        if(orders.getPrice() >= this.bestBidPrice){ // fill order at market price(bestBidPrice)
+        if(order.getPrice() >= this.bestBidPrice){ // fill order at market price(bestBidPrice)
 
         }else{ // reserve order at limit price
 
@@ -46,7 +46,7 @@ public class MatchingEngine {
         mutex.release();
     }
 
-    public void cancelOrder(Orders orders){
+    public void cancelOrder(Order order){
         /*
         get ReservedOrders object that matches newOrder's price
         lock
@@ -69,19 +69,19 @@ public class MatchingEngine {
         lock
         update bestBidPrice;
             if bestBidPrice <= prev_bestBidPrice(right before update) :
-                need to fill the orders (price : bestBidPrice~prev_bestBidPrice)
+                need to fill the order (price : bestBidPrice~prev_bestBidPrice)
             else :
                 nothing to do.
                 finish
 
         get ReservedOrders objects that matches price : bestBidPrice~prev_bestBidPrice
         using ReservedOrders objects
-        Fill the all orders in the hash tables of the objects
+        Fill the all order in the hash tables of the objects
         unlock
         */
     }
 
-    public void fillOrder(Orders filledOrder){
+    public void fillOrder(Order filledOrder){
         /*
         send the filled order to the data center by router
          */

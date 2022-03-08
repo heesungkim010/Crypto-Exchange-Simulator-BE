@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter @Setter
-public class Orders {
+public class Order {
 
     private Long id; //TODO : check if it needs to make this unique or not.
 
@@ -29,7 +29,7 @@ public class Orders {
 
     private Long memberId;
 
-    public Orders(Long id, Ticker ticker, OrderStatus filledOrderStatus, OrderType filledOrderType, double price, double amount, double feeRate, double fee, double moneyToSpend, double moneyToGet, LocalDateTime openedOrderDate, Long memberId) {
+    public Order(Long id, Ticker ticker, OrderStatus filledOrderStatus, OrderType filledOrderType, double price, double amount, double feeRate, double fee, double moneyToSpend, double moneyToGet, LocalDateTime openedOrderDate, Long memberId) {
         this.id = id;
         this.ticker = ticker;
         this.newOrderStatus = filledOrderStatus;

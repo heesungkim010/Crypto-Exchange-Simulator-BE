@@ -1,6 +1,6 @@
 package crypto_simulator.simulator.service;
 
-import crypto_simulator.simulator.domain.Orders;
+import crypto_simulator.simulator.domain.Order;
 import crypto_simulator.simulator.domain.*;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
@@ -35,22 +35,22 @@ public class FilledOrderServiceTest {
         Long savedId = memberService.join(member);
         positionService.initiatePosition(member); // finished registration
 
-        Orders orders = new Orders(1L, Ticker.BTCUSD, OrderStatus.OPEN, OrderType.BUY,
+        Order order = new Order(1L, Ticker.BTCUSD, OrderStatus.OPEN, OrderType.BUY,
                 40000, 10, 0.1, 20, 90000, 0,LocalDateTime.now(),1L);
 
 
-        Orders newSellOrder = new Orders(1L, Ticker.BTCUSD, OrderStatus.OPEN, OrderType.SELL,
+        Order newSellOrder = new Order(1L, Ticker.BTCUSD, OrderStatus.OPEN, OrderType.SELL,
                 50000, 5, 0.1, 20, 0, 250000,LocalDateTime.now(),1L);
 
-        filledOrderService.saveFilledOrder(orders, member);
+        filledOrderService.saveFilledOrder(order, member);
         filledOrderService.saveFilledOrder(newSellOrder, member);
 
-        member.updateUsdBalanceOpen(orders);
-        member.updateUsdBalanceFilled(orders);
+        member.updateUsdBalanceOpen(order);
+        member.updateUsdBalanceFilled(order);
 
         Position position = positionService.findByMemberIdTicker(savedId, Ticker.BTCUSD);
-        position.updatePositionOpen(orders);
-        position.updatePositionFilled(orders);
+        position.updatePositionOpen(order);
+        position.updatePositionFilled(order);
         position.updatePositionOpen(newSellOrder);
         position.updatePositionFilled(newSellOrder);
 

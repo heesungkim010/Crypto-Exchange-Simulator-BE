@@ -20,9 +20,9 @@ The followings are the challenges I got in this project and my solutions.
 
 [Challenge #1] How to implement Matching Engine and get the price information.
 
-[Challenge #2] How to safely cancel the open orders.(Matching engine)
+[Challenge #2] How to safely cancel the open order.(Matching engine)
 
-[Challenge #3] How to quickly open/cancel the orders. (Matching engine)
+[Challenge #3] How to quickly open/cancel the order. (Matching engine)
 
 [Challenge #4] How to send price information from the back-end server to the front-end server.
 
@@ -31,7 +31,7 @@ The followings are the challenges I got in this project and my solutions.
 ### [Challenge #1] How to implement Matching Engine and get the price information.
 
   A Matching engine is a system that matches the order of two sides(buy and sell) and makes a deal for both sides. Matching engines in exchanges use orderbooks.
-However, this exchange simulator project does not use orderbook to match the orders. Because the exchage simulator aims to use the price information in the real world, not the orderbook in a small simulator which lacks of volume.
+However, this exchange simulator project does not use orderbook to match the order. Because the exchage simulator aims to use the price information in the real world, not the orderbook in a small simulator which lacks of volume.
 
   Therefore, I need to get the price information from the external exchanges in the real world, and use that information for the matching engines directly.
 
@@ -40,11 +40,11 @@ However, this exchange simulator project does not use orderbook to match the ord
 
   I can get the price information from the external exchanges by 2 methods. One is HTTP and the other is Web Socket. As the price information needs a real-time communication, I used Web Socket to get the price information.
 
-  Once I get the real-time price and the open orders of users, matching engine can decide whether the orders would be filled or not. I used a hash table shown as below(key-price, value-a list of orders at the price). Once the price reaches at a certain value, the matching engine can fill the orders in the lists.
+  Once I get the real-time price and the open order of users, matching engine can decide whether the order would be filled or not. I used a hash table shown as below(key-price, value-a list of order at the price). Once the price reaches at a certain value, the matching engine can fill the order in the lists.
 
 ![image](https://user-images.githubusercontent.com/63962555/156721278-33ecb70c-6d4c-48b6-a9ab-fadd4bcb409e.png)
 
-### [Challenge #2] How to safely cancel the open orders.(Matching engine)
+### [Challenge #2] How to safely cancel the open order.(Matching engine)
 As the price can change very quickly, there could be an unsafe situation as follows:  
 
 (1) User A opened an order ( Buy 1 BTC at $40,000)   
@@ -54,9 +54,9 @@ As the price can change very quickly, there could be an unsafe situation as foll
 In this situation, there exists a mutual exclusion problem. Because the matching engine tries to do two different things(fill and cancel) for the same order.   
 
 ### [Solution]
-The simplest way to solve this problem is to lock and unlock on the lists of orders at the given prices. For example, in the situation above, the matching engine can lock on the lists at certain prices when the matching engine tries to fill or cancel the order, and unlock after filling or canceling the order. 
+The simplest way to solve this problem is to lock and unlock on the lists of order at the given prices. For example, in the situation above, the matching engine can lock on the lists at certain prices when the matching engine tries to fill or cancel the order, and unlock after filling or canceling the order. 
 
-pros) Safe to order/cancel the orders. 
+pros) Safe to order/cancel the order. 
 
 cons) Overhead and delay caused by locking/unlocking.
 
@@ -64,8 +64,8 @@ The cons seem critical but I could not find any other methods yet. One alternati
 
 ![image](https://user-images.githubusercontent.com/63962555/156720577-9a8de899-9016-456c-8a25-2e4182898259.png)
 
-### [Challenge #3] How to quickly open/cancel the orders. (Matching engine)
- As in <Matching Engine – version 2> above, the orders of the certain price are in a list. If I think of one list, there are 3 situations as below.
+### [Challenge #3] How to quickly open/cancel the order. (Matching engine)
+ As in <Matching Engine – version 2> above, the order of the certain price are in a list. If I think of one list, there are 3 situations as below.
  
 (Situation 1) : An user opens an order.
 
@@ -81,13 +81,13 @@ The matching engine append the order to the list.  --> O(1)
 
 (Situation 2) : The matching engine reaches the price of the list
 
-The matching engine sends the orders in the list to the router.  
+The matching engine sends the order in the list to the router.  
 
 -> O(N) when N = length of the list
 
 (Situation 3) : An user cancels an order.
 
-The matching engine searches the orders in the list and check if there is a corresponding open order to the canceling request and delete the order if exists.
+The matching engine searches the order in the list and check if there is a corresponding open order to the canceling request and delete the order if exists.
 
 -> O(N) when N = length of the list
 

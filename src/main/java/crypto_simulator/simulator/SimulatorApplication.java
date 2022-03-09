@@ -10,7 +10,7 @@ public class SimulatorApplication {
 
 	public static void main(String[] args) throws URISyntaxException, InterruptedException {
 		SpringApplication.run(SimulatorApplication.class, args);
-		//AppConfig appConfig = new AppConfig();
+		AppConfig appConfig = new AppConfig();
 
 		/*
 		NewOrder newOrder = new NewOrder(1L, Ticker.BTCUSD, OrderStatus.OPEN, OrderType.BUY,

@@ -17,11 +17,12 @@ public class AppConfig {
     List<MatchingEngine> matchingEngineList = new ArrayList<MatchingEngine>();
 
     private String[] startingTickersArray = {"btc", "eth"};
-    private double[][] indexPriceList = { {10000, 100000, 0.5}, {500, 7000, 0.1}};
+    private double[][] indexPriceList = { {10000, 100000, 0.5, 180000}, {1000, 10000, 0.05, 180000 }};
     /*
     private double startIndexPrice;
     private double endIndexPrice;
     private double indexGapPrice;
+    private int lengthOfList
     */
     // TODO : some other way to initiate indexPriceList
 

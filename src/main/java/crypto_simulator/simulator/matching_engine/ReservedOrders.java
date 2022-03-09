@@ -12,4 +12,9 @@ public class ReservedOrders {
         this.hashMap = new HashMap<>();
         //lock, unlock not needed here. already done before
     }
+
+    public void addOrder(Order order) {
+        this.hashMap.put(order.getId(), order);
+    }
+
 }

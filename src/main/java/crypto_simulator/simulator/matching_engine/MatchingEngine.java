@@ -28,10 +28,11 @@ public class MatchingEngine {
         this.priceInfoReceiver = new ExternalPriceInfoReceiver(ticker, this.currentPriceBuffer);
 
         this.mutex = new Semaphore(1, true);
-        this.priceIndexArray = new ReservedOrders[180000];
         this.startIndexPrice = indexPriceList[0];
         this.endIndexPrice = indexPriceList[1];
         this.indexGapPrice = indexPriceList[2];
+        this.priceIndexArray = new ReservedOrders[(int) indexPriceList[3]];
+
     }
 
     // TODO : init and re-init every 12 hours(because of binance websocket limitation rules)
@@ -49,9 +50,14 @@ public class MatchingEngine {
         */
         mutex.acquire();
         if(order.getPrice() >= this.curBestBidPrice){ // fill order at market price(bestBidPrice)
+            fillMarketOrder(order);
 
         }else{ // reserve order at limit price
-
+            //1. get index of priceIndexArray using price info.
+            //2. index -> ReservedOrders object -> hash table
+            //3. add [orderId, order] in the hash table.
+            ReservedOrders reservedOrders = this.priceIndexArray[getIndexOfPriceIndexArray(order.getPrice())];
+            reservedOrders.addOrder(order);
         }
         mutex.release();
     }
@@ -95,10 +101,21 @@ public class MatchingEngine {
         mutex.release();
     }
 
-    public void fillOrder(Order filledOrder){
+    public void fillLimitOrder(Order filledOrder){
         /*
-        send the filled order to the data center by router
+        send the filled limit order to the data center by router
+         */
+    }
+
+    public void fillMarketOrder(Order filledOrder){
+        /*
+        send the filled market order to the data center by router
          */
 
+    }
+
+    public int getIndexOfPriceIndexArray(double price){
+        // price --> index
+        return (int) ((price - this.startIndexPrice) / this.indexGapPrice);
     }
 }

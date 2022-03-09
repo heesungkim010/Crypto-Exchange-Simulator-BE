@@ -83,6 +83,7 @@ public class ExternalPriceInfoReceiver {
 
         currentPriceBuffer.setBestBidPrice(bestBidPrice);
         currentPriceBuffer.setBestAskPrice(bestAskPrice);
+        //System.out.println(currentPriceBuffer.getBestBidPrice());
     }
 
     //TODO : add  @OnError @OnClose

@@ -3,6 +3,7 @@ package crypto_simulator.simulator;
 import crypto_simulator.simulator.domain.Order;
 import crypto_simulator.simulator.matching_engine.MatchingEngine;
 import lombok.Setter;
+import org.springframework.stereotype.Component;
 import org.thymeleaf.standard.expression.Each;
 
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Component
 @Setter
 public class AppConfig {
     //setting info. tickers.
@@ -18,6 +20,7 @@ public class AppConfig {
 
     private String[] startingTickersArray = {"btc", "eth"};
     private double[][] indexPriceList = { {10000, 100000, 0.5, 180000}, {1000, 10000, 0.05, 180000 }};
+
     /*
     private double startIndexPrice;
     private double endIndexPrice;
@@ -31,6 +34,8 @@ public class AppConfig {
         for (String ticker: startingTickersArray) {
             putTickerArray(ticker);
         }
+
+        // initiating MatchingEngines
         int index = 0;
         for (String ticker : tickerArray){
             matchingEngineList.add(new MatchingEngine(ticker, indexPriceList[index++]));
@@ -40,6 +45,4 @@ public class AppConfig {
     public void putTickerArray(String ticker){
         this.tickerArray.add(ticker);
     }
-
-
 }

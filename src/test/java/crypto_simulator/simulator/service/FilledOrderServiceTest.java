@@ -28,19 +28,21 @@ public class FilledOrderServiceTest {
     @Rollback(value = false)
     public void initAndFindMemberIdTicker() {
         //given
-        Member member = new Member();
-        member.setUserId("user1");
-        member.setUsuableMoney(100000);
-        member.setCurOrderedMoney(0);
+        Member member = new Member("user1", "1234", 10000, 0);
+
         Long savedId = memberService.join(member);
         positionService.initiatePosition(member); // finished registration
 
-        Order order = new Order(1L, Ticker.BTCUSD, OrderStatus.OPEN, OrderType.BUY,
+        Order order = new Order(Ticker.BTCUSD, OrderStatus.OPEN, OrderType.BUY,
                 40000, 10, 0.1, 20, 90000, 0,LocalDateTime.now(),1L);
 
 
-        Order newSellOrder = new Order(1L, Ticker.BTCUSD, OrderStatus.OPEN, OrderType.SELL,
+        Order newSellOrder = new Order( Ticker.BTCUSD, OrderStatus.OPEN, OrderType.SELL,
                 50000, 5, 0.1, 20, 0, 250000,LocalDateTime.now(),1L);
+
+        System.out.println("check ID");
+        System.out.println(order.getId() );
+        System.out.println(newSellOrder.getId());
 
         filledOrderService.saveFilledOrder(order, member);
         filledOrderService.saveFilledOrder(newSellOrder, member);

@@ -2,8 +2,6 @@ package crypto_simulator.simulator.matching_engine;
 
 import crypto_simulator.simulator.domain.Order;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Semaphore;
 
 public class MatchingEngine {
@@ -11,6 +9,7 @@ public class MatchingEngine {
     private String ticker;
     private ExternalPriceInfoReceiver priceInfoReceiver;
     private CurrentPriceBuffer currentPriceBuffer;
+    private OrderConsumerME receivingBufferME;
     private double curBestBidPrice;
     private double prevBestBidPrice;
     private double curBestAskPrice;
@@ -33,6 +32,7 @@ public class MatchingEngine {
         this.indexGapPrice = indexPriceList[2];
         this.priceIndexArray = new ReservedOrders[(int) indexPriceList[3]];
 
+        this.receivingBufferME = new OrderConsumerME(ticker, this);
     }
 
     // TODO : init and re-init every 12 hours(because of binance websocket limitation rules)
@@ -97,6 +97,7 @@ public class MatchingEngine {
         */
         mutex.acquire();
         this.curBestAskPrice = currentPriceBuffer.getBestBidPrice();
+
 
         mutex.release();
     }

@@ -5,12 +5,17 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.concurrent.atomic.AtomicLong;
 
+@SequenceGenerator(
+        name = "ORDER_SEQ_GENERATOR",
+        sequenceName = "ORDER_SEQ",
+        initialValue = 1,
+        allocationSize =50 )
 @Getter @Setter
 public class Order {
-
-    private Long id; //TODO : check if it needs to make this unique or not.
-
+    private static AtomicLong atomicLong = new AtomicLong(0);
+    private Long id;
     private Ticker ticker;
 
     @Enumerated(EnumType.STRING)
@@ -29,8 +34,8 @@ public class Order {
 
     private Long memberId;
 
-    public Order(Long id, Ticker ticker, OrderStatus filledOrderStatus, OrderType filledOrderType, double price, double amount, double feeRate, double fee, double moneyToSpend, double moneyToGet, LocalDateTime openedOrderDate, Long memberId) {
-        this.id = id;
+    public Order(Ticker ticker, OrderStatus filledOrderStatus, OrderType filledOrderType, double price, double amount, double feeRate, double fee, double moneyToSpend, double moneyToGet, LocalDateTime openedOrderDate, Long memberId) {
+        this.id = atomicLong.incrementAndGet();
         this.ticker = ticker;
         this.newOrderStatus = filledOrderStatus;
         this.newOrderType = filledOrderType;
@@ -43,5 +48,4 @@ public class Order {
         this.openedOrderDate = openedOrderDate;
         this.memberId = memberId;
     }
-
 }

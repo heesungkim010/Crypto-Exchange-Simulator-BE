@@ -10,12 +10,11 @@ public class MatchingEngine {
     private String ticker;
     private ExternalPriceInfoReceiver priceInfoReceiver;
     private CurrentPriceBuffer currentPriceBuffer;
-    private OrderConsumerME receivingBufferME;
+    private OrderConsumerME orderConsumerME;
     private double curBestBidPrice;
     private double prevBestBidPrice;
     private double curBestAskPrice;
     private double prevBestAskPrice;
-    private Router apiMeRouter;
 
     private Semaphore mutex;
     private ReservedOrders[] priceIndexArray;
@@ -32,9 +31,16 @@ public class MatchingEngine {
         this.startIndexPrice = indexPriceList[0];
         this.endIndexPrice = indexPriceList[1];
         this.indexGapPrice = indexPriceList[2];
-        this.priceIndexArray = new ReservedOrders[(int) indexPriceList[3]];
+        this.priceIndexArray = new ReservedOrders[(int)indexPriceList[3]];
+        for(int i = 0; i < (int)indexPriceList[3]; i++){
+            this.priceIndexArray[i] = new ReservedOrders();
+        }
 
-        this.receivingBufferME = new OrderConsumerME(ticker, this);
+        this.orderConsumerME = new OrderConsumerME(ticker, this, apiMeRouter);
+
+        Thread threadConsumerME = new Thread(orderConsumerME, "consumerME");
+        this.curBestBidPrice = 40000;
+        threadConsumerME.start();
     }
 
     // TODO : init and re-init every 12 hours(because of binance websocket limitation rules)
@@ -60,6 +66,7 @@ public class MatchingEngine {
             //3. add [orderId, order] in the hash table.
             ReservedOrders reservedOrders = this.priceIndexArray[getIndexOfPriceIndexArray(order.getPrice())];
             reservedOrders.addOrder(order);
+            System.out.println(reservedOrders.getHashMap());
         }
         mutex.release();
     }
@@ -99,7 +106,6 @@ public class MatchingEngine {
         */
         mutex.acquire();
         this.curBestAskPrice = currentPriceBuffer.getBestBidPrice();
-
 
         mutex.release();
     }

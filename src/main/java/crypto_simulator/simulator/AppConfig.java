@@ -44,10 +44,10 @@ public class AppConfig {
             this.apiMeRouterHashMap.put(
                     ticker, new RouterOneToOne(this.apiMatchingEngineBufferSize));
         }
+
         int index = 0;
         for (String ticker : tickerArray){
-            matchingEngineList.add(new MatchingEngine(
-                    ticker, indexPriceList[index++], this.apiMeRouterHashMap.get(ticker)));
+            matchingEngineList.add(new MatchingEngine(ticker, indexPriceList[index++], this.apiMeRouterHashMap.get(ticker)));
         }
     }
 

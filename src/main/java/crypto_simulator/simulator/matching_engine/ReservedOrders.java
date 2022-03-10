@@ -1,10 +1,12 @@
 package crypto_simulator.simulator.matching_engine;
 
 import crypto_simulator.simulator.domain.Order;
+import lombok.Getter;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Getter
 public class ReservedOrders {
     private Map<Long, Order> hashMap;
 

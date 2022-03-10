@@ -1,5 +1,6 @@
 package crypto_simulator.simulator.domain;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,6 +17,8 @@ import java.util.concurrent.atomic.AtomicLong;
 public class Order {
     private static AtomicLong atomicLong = new AtomicLong(0);
     private Long id;
+
+    @Enumerated(EnumType.STRING)
     private Ticker ticker;
 
     @Enumerated(EnumType.STRING)
@@ -34,7 +37,7 @@ public class Order {
 
     private Long memberId;
 
-    public Order(Ticker ticker, OrderStatus filledOrderStatus, OrderType filledOrderType, double price, double amount, double feeRate, double fee, double moneyToSpend, double moneyToGet, LocalDateTime openedOrderDate, Long memberId) {
+    public Order(Ticker ticker, OrderStatus filledOrderStatus, OrderType filledOrderType, double price, double amount, double feeRate, double fee, double moneyToSpend, double moneyToGet, Long memberId) {
         this.id = atomicLong.incrementAndGet();
         this.ticker = ticker;
         this.newOrderStatus = filledOrderStatus;
@@ -45,7 +48,7 @@ public class Order {
         this.fee = fee;
         this.moneyToSpend = moneyToSpend;
         this.moneyToGet = moneyToGet;
-        this.openedOrderDate = openedOrderDate;
+        this.openedOrderDate = LocalDateTime.now();
         this.memberId = memberId;
     }
 }

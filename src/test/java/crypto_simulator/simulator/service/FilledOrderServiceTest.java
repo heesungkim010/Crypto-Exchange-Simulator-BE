@@ -34,11 +34,11 @@ public class FilledOrderServiceTest {
         positionService.initiatePosition(member); // finished registration
 
         Order order = new Order(Ticker.BTCUSD, OrderStatus.OPEN, OrderType.BUY,
-                40000, 10, 0.1, 20, 90000, 0,LocalDateTime.now(),1L);
+                40000, 10, 0.1, 20, 90000, 0, 1L);
 
 
         Order newSellOrder = new Order( Ticker.BTCUSD, OrderStatus.OPEN, OrderType.SELL,
-                50000, 5, 0.1, 20, 0, 250000,LocalDateTime.now(),1L);
+                50000, 5, 0.1, 20, 0, 250000,1L);
 
         System.out.println("check ID");
         System.out.println(order.getId() );

@@ -1,6 +1,7 @@
 package crypto_simulator.simulator.matching_engine;
 
 import crypto_simulator.simulator.domain.Order;
+import crypto_simulator.simulator.router.Router;
 
 import java.util.concurrent.Semaphore;
 
@@ -14,6 +15,7 @@ public class MatchingEngine {
     private double prevBestBidPrice;
     private double curBestAskPrice;
     private double prevBestAskPrice;
+    private Router apiMeRouter;
 
     private Semaphore mutex;
     private ReservedOrders[] priceIndexArray;
@@ -21,7 +23,7 @@ public class MatchingEngine {
     private double endIndexPrice;
     private double indexGapPrice;
 
-    public MatchingEngine(String ticker, double[] indexPriceList) throws InterruptedException {
+    public MatchingEngine(String ticker, double[] indexPriceList, Router apiMeRouter) throws InterruptedException {
         this.ticker = ticker;
         this.currentPriceBuffer = new CurrentPriceBuffer(ticker);
         this.priceInfoReceiver = new ExternalPriceInfoReceiver(ticker, this.currentPriceBuffer);

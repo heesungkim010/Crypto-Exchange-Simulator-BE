@@ -25,7 +25,7 @@ public class AppConfig {
     private List<MatchingEngine> matchingEngineList = new ArrayList<MatchingEngine>();
 
     private int apiMatchingEngineBufferSize = 10000;
-    private String[] startingTickersArray = {"btc", "eth"};
+    private String[] startingTickersArray = {"btc"};
     private double[][] indexPriceList = { {10000, 100000, 0.5, 180000}, {1000, 10000, 0.05, 180000 }};
     private Map<String, Router> apiMeRouterHashMap;
 
@@ -48,6 +48,7 @@ public class AppConfig {
         int index = 0;
         for (String ticker : tickerArray){
             matchingEngineList.add(new MatchingEngine(ticker, indexPriceList[index++], this.apiMeRouterHashMap.get(ticker)));
+
         }
     }
 

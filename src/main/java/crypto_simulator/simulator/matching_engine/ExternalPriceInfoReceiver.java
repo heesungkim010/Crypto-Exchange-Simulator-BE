@@ -1,12 +1,15 @@
 package crypto_simulator.simulator.matching_engine;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import crypto_simulator.simulator.domain.Ticker;
 import org.apache.tomcat.util.json.JSONParser;
 
 import javax.websocket.*;
 import java.io.EOFException;
 import java.io.IOException;
 import java.net.URI;
+
+import static crypto_simulator.simulator.domain.Ticker.*;
 
 @ClientEndpoint
 /*
@@ -19,6 +22,7 @@ public class ExternalPriceInfoReceiver {
     private String SocketPort = "9443";
     private String SocketPathFront = "/ws/";
     private String SocketPathEnd = "usdt@bookTicker";
+    private String ticker;
     //<symbol>@kline_1m";
     //<symbol>@bookTicker
     private CurrentPriceBuffer currentPriceBuffer;
@@ -31,6 +35,7 @@ public class ExternalPriceInfoReceiver {
 
     public ExternalPriceInfoReceiver(String ticker, CurrentPriceBuffer buffer) {
         try {
+            this.ticker = ticker;
             this.currentPriceBuffer = buffer;
             WebSocketContainer container = ContainerProvider.getWebSocketContainer();
             container.connectToServer(this,
@@ -80,6 +85,10 @@ public class ExternalPriceInfoReceiver {
 
         double bestBidPrice = Double.parseDouble(bestBid);
         double bestAskPrice = Double.parseDouble(bestAsk);
+
+        if(ticker == "btc"){
+            bestAskPrice = (Math.round(bestAskPrice * 2) / 2);
+        }
 
         currentPriceBuffer.setBestBidPrice(bestBidPrice);
         currentPriceBuffer.setBestAskPrice(bestAskPrice);

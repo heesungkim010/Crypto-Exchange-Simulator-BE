@@ -19,5 +19,12 @@ public class ReservedOrders {
         this.hashMap.put(order.getId(), order);
     }
 
-
+    public boolean cancelOrder(Long orderId){
+        if (this.hashMap.containsKey(orderId)){
+            this.hashMap.remove(orderId);
+            return true;
+        }else{
+            return false;
+        }
+    }
 }

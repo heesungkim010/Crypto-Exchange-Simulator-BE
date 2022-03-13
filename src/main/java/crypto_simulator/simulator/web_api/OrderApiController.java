@@ -31,7 +31,7 @@ public class OrderApiController {
     }
 
     @PostMapping("/api/neworder")
-    public NewOrderResponse openNewOrder(@RequestBody NewOrderRequest request) throws InterruptedException { // request received
+    public OrderResponse openNewOrder(@RequestBody NewOrderRequest request) throws InterruptedException { // request received
         // open new order
         // 1. create new order with request
         // 2. send the order to the router( apiMeRouterHashMap.get(ticker) )
@@ -41,8 +41,23 @@ public class OrderApiController {
         log.info("ticker check : {}", request.ticker);
 
         apiMeRouterHashMap.get("btc").send(request.getNewOrder()); // send order
-        return new NewOrderResponse("111",true);
+        return new OrderResponse("111",true);
     }
+
+    @PostMapping("/api/neworder/cancel")
+    public OrderResponse cancelOrder(@RequestBody NewOrderRequest request) throws InterruptedException { // request received
+        // cancel order
+        // 1. create cancel order with request
+        // 2. send the order to the router( apiMeRouterHashMap.get(ticker) )
+        // 3. return opening order result
+        log.info("{}",request);
+        log.info("price check : {}", request.getPrice());
+        log.info("ticker check : {}", request.ticker);
+
+        apiMeRouterHashMap.get("btc").send(request.getNewOrder()); // send order
+        return new OrderResponse("111",true);
+    }
+
     /*
     Order order = new Order(Ticker.BTCUSD, OrderStatus.OPEN, OrderType.BUY,
         40000, 10, 0.1, 20, 90000, 0,LocalDateTime.now(),1L);
@@ -50,11 +65,11 @@ public class OrderApiController {
 
 
     @Data
-    class NewOrderResponse{
+    class OrderResponse{
         private String memberId;
         private boolean openNewOrderResult;
 
-        public NewOrderResponse(String id, boolean didOpen){
+        public OrderResponse(String id, boolean didOpen){
             this.memberId = id;
             this.openNewOrderResult = didOpen;
         }

@@ -1,20 +1,18 @@
 package crypto_simulator.simulator.matching_engine;
 
 import crypto_simulator.simulator.domain.Order;
-import crypto_simulator.simulator.domain.OrderType;
 import crypto_simulator.simulator.router.Router;
 
 import java.util.Map;
 import java.util.concurrent.Semaphore;
 
-public class MatchingEngine implements Runnable{
+public class MatchingEngineBUY implements Runnable{
 
     private String ticker;
     private ExternalPriceInfoReceiver priceInfoReceiver;
     private CurrentPriceBuffer currentPriceBuffer;
-    private OrderConsumerME orderConsumerME;
-    private double curBestBidPrice;
-    private double prevBestBidPrice;
+    //private double curBestBidPrice;
+    //private double prevBestBidPrice;
     private double curBestAskPrice;
     private double prevBestAskPrice;
 
@@ -25,14 +23,16 @@ public class MatchingEngine implements Runnable{
     private double endIndexPrice;
     private double indexGapPrice;
 
-    public MatchingEngine(String ticker, double[] indexPriceList, Router apiMeRouter) throws InterruptedException {
+    public MatchingEngineBUY(String ticker, double[] indexPriceList, Router apiMeRouter,
+                            CurrentPriceBuffer currentPriceBuffer,
+                             ExternalPriceInfoReceiver externalPriceInfoReceiver
+                            ) throws InterruptedException {
         this.ticker = ticker;
-        this.currentPriceBuffer = new CurrentPriceBuffer(ticker);
-        this.priceInfoReceiver = new ExternalPriceInfoReceiver(ticker, this.currentPriceBuffer);
+        this.currentPriceBuffer = currentPriceBuffer;
+        this.priceInfoReceiver = externalPriceInfoReceiver;
 
-        this.prevBestBidPrice = 0;
+        //Order ConsumerMe
         this.prevBestAskPrice = -1;
-
         this.mutex = new Semaphore(1, true);
 
         this.startIndexPrice = indexPriceList[0];
@@ -46,14 +46,8 @@ public class MatchingEngine implements Runnable{
             this.priceIndexArrayBuy[i] = new ReservedOrders();
             this.mutexArray[i] = new Semaphore(1, true);
         }
-
-        this.orderConsumerME = new OrderConsumerME(ticker, this, apiMeRouter);
-
         Thread threadUpdateAndFill = new Thread(this, "updateAndFill");
         threadUpdateAndFill.start();
-
-        Thread threadConsumerME = new Thread(orderConsumerME, "consumerME");
-        threadConsumerME.start();
     }
 
     // TODO : init and re-init every 12 hours(because of binance websocket limitation rules)
@@ -64,37 +58,30 @@ public class MatchingEngine implements Runnable{
 
     public void openOrder(Order order) throws InterruptedException {
         /*
-        check order type(BUY, SELL)
+        order type(BUY)
 
-        [When BUY]
         lock
         check bestAskPrice;
         do market filled or reserve order at limit price
         unlock
         */
-        if (order.getNewOrderType() == OrderType.BUY){
-            mutex.acquire();
-            if(order.getPrice() >= this.curBestAskPrice){ // fill order at market price(bestAskPrice)
-                fillMarketOrder(order);
+        mutex.acquire();
+        if(order.getPrice() >= this.curBestAskPrice){ // fill order at market price(bestAskPrice)
+            fillMarketOrder(order);
 
-            }else{ // reserve order at limit price
-                //1. get index of priceIndexArray using price info.
-                //2. index -> ReservedOrders object -> hash table
-                //3. add [orderId, order] in the hash table.
-                ReservedOrders reservedOrders =
-                        this.priceIndexArrayBuy[getIndexOfPriceIndexArray(order.getPrice())];
-                reservedOrders.addOrder(order);
-            }
-            mutex.release();
-        }else{ // OrderType.SELL
-
-
+        }else{ // reserve order at limit price
+            //1. get index of priceIndexArray using price info.
+            //2. index -> ReservedOrders object -> hash table
+            //3. add [orderId, order] in the hash table.
+            ReservedOrders reservedOrdersImpl =
+                    this.priceIndexArrayBuy[getIndexOfPriceIndexArray(order.getPrice())];
+            reservedOrdersImpl.addOrder(order);
         }
+        mutex.release();
     }
 
-    public void cancelOrder(Order order) throws InterruptedException {
+    public boolean cancelOrder(Order order) throws InterruptedException {
         /*
-        check order type(BUY, SELL)
 
         get ReservedOrders object that matches newOrder's price
         lock
@@ -104,31 +91,24 @@ public class MatchingEngine implements Runnable{
         if not exists : the order is already filled. cancelOrder fail
         unlock
         */
-        if (order.getNewOrderType() == OrderType.BUY){
-            mutex.acquire();
-            if(order.getPrice() >= this.curBestAskPrice){ // fill order at market price(bestAskPrice)
-                fillMarketOrder(order);
+        mutex.acquire();
+        // reserveOrder at limit price
+        //1. get index of priceIndexArray using price info.
+        //2. index -> ReservedOrders object -> hash table
+        //3. remove [orderId, order] in the hash table.
+        ReservedOrders reservedOrdersImpl =
+                this.priceIndexArrayBuy[getIndexOfPriceIndexArray(order.getPrice())];
+        boolean result = reservedOrdersImpl.cancelOrder(order.getId());
 
-            }else{ // reserve order at limit price
-                //1. get index of priceIndexArray using price info.
-                //2. index -> ReservedOrders object -> hash table
-                //3. add [orderId, order] in the hash table.
-                ReservedOrders reservedOrders =
-                        this.priceIndexArrayBuy[getIndexOfPriceIndexArray(order.getPrice())];
-                reservedOrders.addOrder(order);
-            }
-            mutex.release();
-        }else{ // OrderType.SELL
+        mutex.release();
 
-
-        }
-
-
+        return result;
         /*
         TODO : think of another way to delete order
          method1(above) : lock/unlock
          method2(another way) : just delete the order without locking.
          And then handle the exceptions(which can occur in cancel, fill methods)
+         method3 : use atomic reference array for priceIndexArray
         */
     }
 
@@ -142,7 +122,6 @@ public class MatchingEngine implements Runnable{
             }
         }
     }
-
     public void updatePriceAndFillBuyOrders() throws InterruptedException {
         /*
         lock
@@ -175,22 +154,24 @@ public class MatchingEngine implements Runnable{
         mutex.release();
     }
 
-    public void fillLimitOrders(ReservedOrders reservedOrders){
+    public void fillLimitOrders(ReservedOrders reservedOrdersImpl){
         /*
         for all orders in hashtable of reservedOrders
             : (1) send the filled limit orders to the data center by router
         erase all the elements in hashtable
          */
-        for(Map.Entry<Long, Order> elem : reservedOrders.getHashMap().entrySet()){
-            //TODO : set router ( ME - Data Center)
+        for(Map.Entry<Long, Order> elem : reservedOrdersImpl.getHashMap().entrySet()){
+            //TODO : set router ( ME - Data Center. ManyToONE) ... LIMIT ORDER + MARKET ORDER
         }
-        reservedOrders.getHashMap().clear();
+        reservedOrdersImpl.getHashMap().clear();
     }
 
     public void fillMarketOrder(Order filledOrder){
         /*
         send the filled market order to the data center by router
          */
+        filledOrder.setPrice(this.curBestAskPrice); // change the order price to market price.
+        //TODO : set router  ( ME - Data Center. ManyToONE) ... LIMIT ORDER + MARKET ORDER
     }
 
     public int getIndexOfPriceIndexArray(double price){

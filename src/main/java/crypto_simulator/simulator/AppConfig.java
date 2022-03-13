@@ -1,28 +1,23 @@
 package crypto_simulator.simulator;
 
-import crypto_simulator.simulator.domain.Order;
-import crypto_simulator.simulator.matching_engine.MatchingEngine;
+import crypto_simulator.simulator.matching_engine.*;
 import crypto_simulator.simulator.router.Router;
 import crypto_simulator.simulator.router.RouterOneToOne;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
-import org.thymeleaf.standard.expression.Each;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import java.util.stream.Collectors;
 
 @Component
 @Setter @Getter
 public class AppConfig {
     //setting info. tickers.
     private ArrayList<String> tickerArray = new ArrayList<String>();
-    private List<MatchingEngine> matchingEngineList = new ArrayList<MatchingEngine>();
+    private List<MatchingEngineBUY> matchingEngineBUYList = new ArrayList<MatchingEngineBUY>();
 
     private int apiMatchingEngineBufferSize = 10000;
     private String[] startingTickersArray = {"btc"};
@@ -47,12 +42,41 @@ public class AppConfig {
 
         int index = 0;
         for (String ticker : tickerArray){
-            matchingEngineList.add(new MatchingEngine(ticker, indexPriceList[index++], this.apiMeRouterHashMap.get(ticker)));
+            CurrentPriceBuffer priceBuffer = initCurrentPriceBuffer(ticker);
+            ExternalPriceInfoReceiver priceInfoReceiver = initExternalPriceInfoReceiver(ticker, priceBuffer);
 
+            MatchingEngineBUY matchingEngineBUY = new MatchingEngineBUY(ticker, indexPriceList[index++],
+                    this.apiMeRouterHashMap.get(ticker), priceBuffer, priceInfoReceiver);
+
+            ReqConsumerMe reqConsumerMeBUY = initOrderConsumerMeBUY(ticker,
+                    matchingEngineBUY, this.apiMeRouterHashMap.get(ticker));
+
+            Thread threadReqConsume = new Thread(reqConsumerMeBUY, "reqConsumerMeBUY");
+            threadReqConsume.start();
+/*
+        // new CurrentPriceBufferImpl(ticker); -- ticker buy/sell --> one per ticker
+        // new ExternalPriceInfoReceiverImpl(ticker, this.currentPriceBuffer); ticker buy/sell --> one per ticker
+        //OrderConsumerMe ;  ticker buy one  ticker sell one. --. two per ticker
+        //(String ticker, MatchingEngineBUY me, Router apiMeRouter)
+ */
         }
+    }
+    public CurrentPriceBuffer initCurrentPriceBuffer(String ticker){
+        return new CurrentPriceBufferImpl(ticker);
+    }
+
+    public ExternalPriceInfoReceiver initExternalPriceInfoReceiver(
+            String ticker, CurrentPriceBuffer buffer){
+        return new ExternalPriceInfoReceiverImpl(ticker, buffer);
+    }
+
+    public ReqConsumerMe initOrderConsumerMeBUY(
+            String ticker, MatchingEngineBUY me, Router router){
+        return new ReqConsumerMeBUYImpl(ticker, me, router);
     }
 
     public void putTickerArray(String ticker){
+
         this.tickerArray.add(ticker);
     }
 }

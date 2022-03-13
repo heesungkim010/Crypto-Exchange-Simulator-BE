@@ -4,7 +4,7 @@ import crypto_simulator.simulator.AppConfig;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class MatchingEngineTest {
+public class MatchingEngineBUYTest {
 
     @Test
     public void meTest(){

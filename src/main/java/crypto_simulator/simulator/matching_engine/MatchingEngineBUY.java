@@ -10,6 +10,7 @@ public class MatchingEngineBUY implements Runnable{
 
     private String ticker;
     private ExternalPriceInfoReceiver priceInfoReceiver;
+    private PriceInfoSender priceInfoSender;
     //private double curBestBidPrice;
     //private double prevBestBidPrice;
     private double curBestAskPrice;
@@ -23,10 +24,11 @@ public class MatchingEngineBUY implements Runnable{
     private double indexGapPrice;
 
     public MatchingEngineBUY(String ticker, double[] indexPriceList, Router apiMeRouter,
-                             ExternalPriceInfoReceiver externalPriceInfoReceiver
-                            ) throws InterruptedException {
+                             ExternalPriceInfoReceiver externalPriceInfoReceiver,
+                             PriceInfoSender priceInfoSender) throws InterruptedException {
         this.ticker = ticker;
         this.priceInfoReceiver = externalPriceInfoReceiver;
+        this.priceInfoSender = priceInfoSender;
 
         //Order ConsumerMe
         this.prevBestAskPrice = -1;
@@ -150,7 +152,9 @@ public class MatchingEngineBUY implements Runnable{
             }
         }
         this.prevBestAskPrice = this.curBestAskPrice;
-        //TODO : send cur price info by web socket.
+        this.priceInfoSender.setCurBestAskPrice(this.curBestAskPrice);
+        // set price info at PriceInfoSender  --> this will be transmitted to FE by web-socket.
+
         mutex.release();
     }
 

@@ -42,11 +42,11 @@ public class AppConfig {
 
         int index = 0;
         for (String ticker : tickerArray){
-            CurrentPriceBuffer priceBuffer = initCurrentPriceBuffer(ticker);
-            ExternalPriceInfoReceiver priceInfoReceiver = initExternalPriceInfoReceiver(ticker, priceBuffer);
+            ExternalPriceInfoReceiver priceInfoReceiver =
+                    initExternalPriceInfoReceiver(ticker);
 
             MatchingEngineBUY matchingEngineBUY = new MatchingEngineBUY(ticker, indexPriceList[index++],
-                    this.apiMeRouterHashMap.get(ticker), priceBuffer, priceInfoReceiver);
+                    this.apiMeRouterHashMap.get(ticker), priceInfoReceiver);
 
             ReqConsumerMe reqConsumerMeBUY = initOrderConsumerMeBUY(ticker,
                     matchingEngineBUY, this.apiMeRouterHashMap.get(ticker));
@@ -56,18 +56,15 @@ public class AppConfig {
 /*
         // new CurrentPriceBufferImpl(ticker); -- ticker buy/sell --> one per ticker
         // new ExternalPriceInfoReceiverImpl(ticker, this.currentPriceBuffer); ticker buy/sell --> one per ticker
-        //OrderConsumerMe ;  ticker buy one  ticker sell one. --. two per ticker
+        //OrderConsumerMe;  ticker buy one  ticker sell one. --. two per ticker
         //(String ticker, MatchingEngineBUY me, Router apiMeRouter)
  */
         }
     }
-    public CurrentPriceBuffer initCurrentPriceBuffer(String ticker){
-        return new CurrentPriceBufferImpl(ticker);
-    }
 
     public ExternalPriceInfoReceiver initExternalPriceInfoReceiver(
-            String ticker, CurrentPriceBuffer buffer){
-        return new ExternalPriceInfoReceiverImpl(ticker, buffer);
+            String ticker){
+        return new ExternalPriceInfoReceiverImpl(ticker);
     }
 
     public ReqConsumerMe initOrderConsumerMeBUY(
@@ -76,7 +73,6 @@ public class AppConfig {
     }
 
     public void putTickerArray(String ticker){
-
         this.tickerArray.add(ticker);
     }
 }

@@ -8,4 +8,8 @@ public interface ExternalPriceInfoReceiver {
     void close();
     public void onOpen(Session userSession);
 
+    double getBestBidPrice();
+    void setBestBidPrice(double price);
+    double getBestAskPrice();
+    void setBestAskPrice(double price);
 }

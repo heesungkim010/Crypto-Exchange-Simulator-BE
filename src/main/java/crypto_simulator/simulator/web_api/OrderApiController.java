@@ -63,7 +63,6 @@ public class OrderApiController {
         40000, 10, 0.1, 20, 90000, 0,LocalDateTime.now(),1L);
      */
 
-
     @Data
     class OrderResponse{
         private String memberId;

@@ -10,7 +10,6 @@ public class MatchingEngineBUY implements Runnable{
 
     private String ticker;
     private ExternalPriceInfoReceiver priceInfoReceiver;
-    private CurrentPriceBuffer currentPriceBuffer;
     //private double curBestBidPrice;
     //private double prevBestBidPrice;
     private double curBestAskPrice;
@@ -24,11 +23,9 @@ public class MatchingEngineBUY implements Runnable{
     private double indexGapPrice;
 
     public MatchingEngineBUY(String ticker, double[] indexPriceList, Router apiMeRouter,
-                            CurrentPriceBuffer currentPriceBuffer,
                              ExternalPriceInfoReceiver externalPriceInfoReceiver
                             ) throws InterruptedException {
         this.ticker = ticker;
-        this.currentPriceBuffer = currentPriceBuffer;
         this.priceInfoReceiver = externalPriceInfoReceiver;
 
         //Order ConsumerMe
@@ -101,7 +98,6 @@ public class MatchingEngineBUY implements Runnable{
         boolean result = reservedOrdersImpl.cancelOrder(order.getId());
 
         mutex.release();
-
         return result;
         /*
         TODO : think of another way to delete order
@@ -141,7 +137,8 @@ public class MatchingEngineBUY implements Runnable{
         unlock
         */
         mutex.acquire();
-        this.curBestAskPrice = currentPriceBuffer.getBestAskPrice();
+        this.curBestAskPrice = priceInfoReceiver.getBestAskPrice();
+        System.out.println(this.curBestAskPrice);
         if (this.curBestAskPrice < this.prevBestAskPrice){
             //fill the order (price : bestAskPrice~prev_bestAskPrice)
             for(int i = getIndexOfPriceIndexArray(this.prevBestAskPrice);

@@ -18,9 +18,11 @@ public class ExternalPriceInfoReceiverImpl implements ExternalPriceInfoReceiver{
     private String SocketPathFront = "/ws/";
     private String SocketPathEnd = "usdt@bookTicker";
     private String ticker;
+    private double bestBidPrice;
+    private double bestAskPrice;
+
     //<symbol>@kline_1m";
     //<symbol>@bookTicker
-    private CurrentPriceBuffer currentPriceBuffer;
     ObjectMapper objectMapper = new ObjectMapper();
 
     //binance websocket endpoint.
@@ -28,10 +30,9 @@ public class ExternalPriceInfoReceiverImpl implements ExternalPriceInfoReceiver{
 
     Session userSession = null;
 
-    public ExternalPriceInfoReceiverImpl(String ticker, CurrentPriceBuffer buffer) {
+    public ExternalPriceInfoReceiverImpl(String ticker) {
         try {
             this.ticker = ticker;
-            this.currentPriceBuffer = buffer;
             WebSocketContainer container = ContainerProvider.getWebSocketContainer();
             container.connectToServer(this,
                     new URI("wss://"+SocketIp+":"+SocketPort+SocketPathFront+ticker+SocketPathEnd));
@@ -44,6 +45,26 @@ public class ExternalPriceInfoReceiverImpl implements ExternalPriceInfoReceiver{
     public void onOpen(Session userSession) {
         System.out.println("=== Websocket opened ===");
         this.userSession = userSession;
+    }
+
+    @Override
+    public double getBestBidPrice() {
+        return this.bestBidPrice;
+    }
+
+    @Override
+    public void setBestBidPrice(double price) {
+        this.bestBidPrice = price;
+    }
+
+    @Override
+    public double getBestAskPrice() {
+        return this.bestAskPrice;
+    }
+
+    @Override
+    public void setBestAskPrice(double price) {
+        this.bestAskPrice = price;
     }
 
     public void close() {
@@ -78,15 +99,15 @@ public class ExternalPriceInfoReceiverImpl implements ExternalPriceInfoReceiver{
         String bestBid = tokens[2].split(":")[1].replaceAll("\"", "");
         String bestAsk = tokens[4].split(":")[1].replaceAll("\"", "");
 
-        double bestBidPrice = Double.parseDouble(bestBid);
-        double bestAskPrice = Double.parseDouble(bestAsk);
-
+        /*
         if(ticker == "btc"){
             bestAskPrice = (Math.round(bestAskPrice * 2) / 2);
         }
+        */
 
-        currentPriceBuffer.setBestBidPrice(bestBidPrice);
-        currentPriceBuffer.setBestAskPrice(bestAskPrice);
+        this.bestBidPrice = Double.parseDouble(bestBid);
+        this.bestAskPrice = Double.parseDouble(bestAsk);
+
         //System.out.println(currentPriceBuffer.getBestBidPrice());
     }
 

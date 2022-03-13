@@ -2,7 +2,7 @@ package crypto_simulator.simulator;
 
 import crypto_simulator.simulator.matching_engine.*;
 import crypto_simulator.simulator.router.Router;
-import crypto_simulator.simulator.router.RouterOneToOne;
+import crypto_simulator.simulator.router.RouterManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
@@ -22,7 +22,7 @@ public class AppConfig {
     private int apiMatchingEngineBufferSize = 10000;
     private String[] startingTickersArray = {"btc"};
     private double[][] indexPriceList = { {10000, 100000, 0.5, 180000}, {1000, 10000, 0.05, 180000 }};
-    private Map<String, Router> apiMeRouterHashMap;
+    private Map<String, Router> apiMeBUYRouterHashMap;
 
     /*
     private double startIndexPrice;
@@ -33,11 +33,12 @@ public class AppConfig {
     // TODO : some other way to initiate indexPriceList
 
     public AppConfig() throws InterruptedException {
-        this.apiMeRouterHashMap = new ConcurrentHashMap<>();
+        this.apiMeBUYRouterHashMap = new ConcurrentHashMap<>();
+
         for (String ticker: startingTickersArray) {
             putTickerArray(ticker);
-            this.apiMeRouterHashMap.put(
-                    ticker, new RouterOneToOne(this.apiMatchingEngineBufferSize));
+            this.apiMeBUYRouterHashMap.put(
+                    ticker, new RouterManyToOne(this.apiMatchingEngineBufferSize));
         }
 
         int index = 0;
@@ -46,10 +47,10 @@ public class AppConfig {
                     initExternalPriceInfoReceiver(ticker);
 
             MatchingEngineBUY matchingEngineBUY = new MatchingEngineBUY(ticker, indexPriceList[index++],
-                    this.apiMeRouterHashMap.get(ticker), priceInfoReceiver);
+                    this.apiMeBUYRouterHashMap.get(ticker), priceInfoReceiver);
 
             ReqConsumerMe reqConsumerMeBUY = initOrderConsumerMeBUY(ticker,
-                    matchingEngineBUY, this.apiMeRouterHashMap.get(ticker));
+                    matchingEngineBUY, this.apiMeBUYRouterHashMap.get(ticker));
 
             Thread threadReqConsume = new Thread(reqConsumerMeBUY, "reqConsumerMeBUY");
             threadReqConsume.start();

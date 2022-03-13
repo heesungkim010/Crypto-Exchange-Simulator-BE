@@ -31,16 +31,9 @@ public class ReqConsumerMeBUYImpl implements Runnable, ReqConsumerMe {
                 if (orderType == OrderType.BUY){
                     matchingEngineBUY.openOrder(order);
 
-                }else if (orderType == OrderType.CANCEL_BUY){
+                }else{ //(orderType == OrderType.CANCEL_BUY)
                     matchingEngineBUY.cancelOrder(order);
-
-                }else if (orderType == OrderType.SELL){
-
-                }else{ // OrderType.CANCEL_SELL
-
                 }
-
-                //System.out.println(order);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

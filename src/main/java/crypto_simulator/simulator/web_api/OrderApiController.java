@@ -22,39 +22,46 @@ import java.util.concurrent.atomic.AtomicLong;
 public class OrderApiController {
     private static AtomicLong atomicLong = new AtomicLong(0);
     private final AppConfig appConfig;
-    private Map<String, Router> apiMeRouterHashMap;
+    private Map<String, Router> apiMeBUYRouterHashMap;
 
     @Autowired
     public OrderApiController(AppConfig appConfig) {
         this.appConfig = appConfig;
-        this.apiMeRouterHashMap = appConfig.getApiMeRouterHashMap();// ticker, router
+        this.apiMeBUYRouterHashMap = appConfig.getApiMeBUYRouterHashMap();// ticker, router
     }
 
-    @PostMapping("/api/neworder")
+    @PostMapping("/api/neworder/buy")
     public OrderResponse openNewOrder(@RequestBody NewOrderRequest request) throws InterruptedException { // request received
-        // open new order
-        // 1. create new order with request
-        // 2. send the order to the router( apiMeRouterHashMap.get(ticker) )
-        // 3. return opening order result
-        log.info("{}",request);
-        log.info("price check : {}", request.getPrice());
-        log.info("ticker check : {}", request.ticker);
+        // open new order (BUY, CANCEL_BUY)
+        /*
+        MAKE BUY ORDER
+        1. create new order with request
+        2. send the order to the router( apiMeBUYRouterHashMap.get(ticker) )
+        3. return opening order result
+        MAKE CANCEL_BUY ORDER
+        1. create cancel order with request
+        2. send the order to the router( apiMeBUYRouterHashMap.get(ticker) )
+        3. return opening order result
+        */
 
-        apiMeRouterHashMap.get("btc").send(request.getNewOrder()); // send order
+        apiMeBUYRouterHashMap.get("btc").send(request.getNewOrder()); // send order
         return new OrderResponse("111",true);
     }
 
-    @PostMapping("/api/neworder/cancel")
+    @PostMapping("/api/neworder/sell")
     public OrderResponse cancelOrder(@RequestBody NewOrderRequest request) throws InterruptedException { // request received
-        // cancel order
-        // 1. create cancel order with request
-        // 2. send the order to the router( apiMeRouterHashMap.get(ticker) )
-        // 3. return opening order result
-        log.info("{}",request);
-        log.info("price check : {}", request.getPrice());
-        log.info("ticker check : {}", request.ticker);
-
-        apiMeRouterHashMap.get("btc").send(request.getNewOrder()); // send order
+        // open new order (SELL, CANCEL_SELL)
+        /*
+        MAKE SELL ORDER
+        1. create new order with request
+        2. send the order to the router( apiMeBUYRouterHashMap.get(ticker) )
+        3. return opening order result
+        MAKE CANCEL_SELL ORDER
+        1. create cancel order with request
+        2. send the order to the router( apiMeBUYRouterHashMap.get(ticker) )
+        3. return opening order result
+        */
+        //apiMeRouterHashMap.get("btc").send(request.getNewOrder()); // send order
         return new OrderResponse("111",true);
     }
 

@@ -5,6 +5,8 @@ import crypto_simulator.simulator.matching_engine.*;
 import crypto_simulator.simulator.router.Router;
 import crypto_simulator.simulator.router.RouterManyToOne;
 import crypto_simulator.simulator.service.FilledOrderService;
+import crypto_simulator.simulator.service.MemberService;
+import crypto_simulator.simulator.service.PositionService;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -75,7 +77,10 @@ public class AppConfig {
                     priceInfoSender,
                     meToDcRouter);
 
-            DataCenter dataCenter = new DataCenter(ac.getBean(FilledOrderService.class),
+            DataCenter dataCenter = new DataCenter(
+                    ac.getBean(MemberService.class),
+                    ac.getBean(FilledOrderService.class),
+                    ac.getBean(PositionService.class),
                     meToDcRouter, ticker);
             //non init-functions end.
 

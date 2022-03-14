@@ -69,4 +69,5 @@ public class Order {
         this.openedOrderDate = LocalDateTime.now();
         this.memberId = memberId;
     }
+
 }

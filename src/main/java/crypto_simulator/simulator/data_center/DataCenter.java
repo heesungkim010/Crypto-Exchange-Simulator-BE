@@ -1,22 +1,27 @@
 package crypto_simulator.simulator.data_center;
 
-import crypto_simulator.simulator.domain.Order;
-import crypto_simulator.simulator.domain.OrderStatus;
-import crypto_simulator.simulator.domain.OrderType;
+import crypto_simulator.simulator.domain.*;
 import crypto_simulator.simulator.router.Router;
 import crypto_simulator.simulator.service.FilledOrderService;
+import crypto_simulator.simulator.service.MemberService;
+import crypto_simulator.simulator.service.PositionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 
 public class DataCenter implements Runnable{
+    private MemberService memberService;
     private FilledOrderService filledOrderService; // SpringBean
+    private PositionService positionService;
     private Router meToDataCenterRouter;
     private String ticker;
 
-    public DataCenter(FilledOrderService filledOrderService, Router meToDataCenterRouter, String ticker) {
+    public DataCenter(MemberService memberService, FilledOrderService filledOrderService, PositionService positionService, Router meToDataCenterRouter, String ticker) {
+        this.memberService = memberService;
         this.filledOrderService = filledOrderService;
+        this.positionService = positionService;
         this.meToDataCenterRouter = meToDataCenterRouter;
         this.ticker = ticker;
     }
@@ -77,19 +82,82 @@ public class DataCenter implements Runnable{
         }
     }
 
+
+    /*
+    filledOrderService : save Filled
+    member : updateBalance Open/Filled/Cancelled
+    position : updatePosition Open/Filled/Cancelled
+
+    Position position = positionService.findByMemberIdTicker(savedId, Ticker.BTCUSD);
+
+    */
     void fillBuyOrder(Order order){
+    /*
+        filledOrderService : save Filled
+        member : updateBalance Open/Filled/Cancelled
+        position : updatePosition Open/Filled/Cancelled
+         notify the order is filled.
+     */
+
+        Member member = memberService.findById(order.getMemberId());
+
+        Position position = positionService.findByMemberIdTicker(member, order.getTicker());
+
+        filledOrderService.saveFilledOrder(order, member);
+        //filledOrderService DONE!
+        //Below transaction does not apply to DB
+        member.updateUsdBalanceFilled(order);
+        position.updatePositionFilled(order);
+        //TODO : TRANSACTION!!!
         System.out.println("fill buy");
     }
 
     void fillSellOrder(Order order){
+    /*
+        filledOrderService : save Filled
+        member : updateBalance Open/Filled/Cancelled
+        position : updatePosition Open/Filled/Cancelled
+         notify the order is filled.
+     */
+        Member member = memberService.findById(order.getMemberId());
+        Position position = positionService.findByMemberIdTicker(member, order.getTicker());
+
+        filledOrderService.saveFilledOrder(order, member);
+        member.updateUsdBalanceFilled(order);
+        position.updatePositionFilled(order);
+
         System.out.println("fill sell");
     }
 
     void fillCancelBuyOrder(Order order){
+    /*
+
+        member : updateBalance Open/Filled/Cancelled
+        position : updatePosition Open/Filled/Cancelled
+         notify the order is filled.
+     */
+        Member member = memberService.findById(order.getMemberId());
+        Position position = positionService.findByMemberIdTicker(member, order.getTicker());
+
+        member.updateUsdBalanceCancelled(order);
+        position.updatePositionCancelled(order);
+
         System.out.println("fill cancel buy");
     }
 
     void fillCancelSellOrder(Order order){
+    /*
+
+        member : updateBalance Open/Filled/Cancelled
+        position : updatePosition Open/Filled/Cancelled
+         notify the order is filled.
+     */
+        Member member = memberService.findById(order.getMemberId());
+        Position position = positionService.findByMemberIdTicker(member, order.getTicker());
+
+        member.updateUsdBalanceCancelled(order);
+        position.updatePositionCancelled(order);
+
         System.out.println("fill cancel sell");
     }
 }

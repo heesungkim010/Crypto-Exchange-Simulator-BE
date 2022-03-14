@@ -8,8 +8,14 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter
+@SequenceGenerator(
+        name = "FILLED_SEQ_GENERATOR",
+        sequenceName = "FILLED_SEQ",
+        initialValue = 1,
+        allocationSize =50 )
 public class FilledOrders {
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE,
+            generator = "FILLED_SEQ_GENERATOR")
     @Column(name = "filled_orders_id")
     private Long id;
 

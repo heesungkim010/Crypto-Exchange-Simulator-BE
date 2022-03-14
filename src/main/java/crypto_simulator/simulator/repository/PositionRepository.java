@@ -1,5 +1,6 @@
 package crypto_simulator.simulator.repository;
 
+import crypto_simulator.simulator.domain.Member;
 import crypto_simulator.simulator.domain.Position;
 import crypto_simulator.simulator.domain.Ticker;
 import lombok.RequiredArgsConstructor;
@@ -21,10 +22,12 @@ public class PositionRepository {
         em.persist(position);
     }
 
-    public Position findByMemberIdTicker(Long memberId, Ticker ticker){
-        return em.createQuery("select cp from Position cp where cp.id = :memberId and cp.ticker = :ticker", Position.class)
-                .setParameter("memberId", memberId)
+    public Position findByMemberIdTicker(Member member, Ticker ticker){
+        System.out.println("position repository");
+        return em.createQuery("select p from Position p where p.memberInPosition = :member and p.ticker = :ticker", Position.class)
+                .setParameter("member", member)
                 .setParameter("ticker", ticker)
                 .getSingleResult();
+
     }
 }

@@ -35,6 +35,9 @@ public class Member {
     @OneToMany(mappedBy = "memberInPosition")
     private List<Position> Positions = new ArrayList<>();
 
+    public Member() {
+    }
+
     public Member(String userId, String password, double usuableMoney, double curOrderedMoney) {
         this.userId = userId;
         this.password = password;
@@ -64,7 +67,7 @@ public class Member {
             this.usuableMoney += order.getMoneyToSpend();
             this.curOrderedMoney -= order.getMoneyToSpend();
         }else{ // OrderType.SELL
-
+            //nothing to do in usd balance
         }
     }
 

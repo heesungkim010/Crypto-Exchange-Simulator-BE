@@ -36,7 +36,6 @@ public class FilledOrderServiceTest {
         Order order = new Order(Ticker.BTCUSD, OrderStatus.OPEN, OrderType.BUY,
                 40000, 10, 0.1, 20, 90000, 0, 1L);
 
-
         Order newSellOrder = new Order( Ticker.BTCUSD, OrderStatus.OPEN, OrderType.SELL,
                 50000, 5, 0.1, 20, 0, 250000,1L);
 
@@ -50,7 +49,7 @@ public class FilledOrderServiceTest {
         member.updateUsdBalanceOpen(order);
         member.updateUsdBalanceFilled(order);
 
-        Position position = positionService.findByMemberIdTicker(savedId, Ticker.BTCUSD);
+        Position position = positionService.findByMemberIdTicker(member, Ticker.BTCUSD);
         position.updatePositionOpen(order);
         position.updatePositionFilled(order);
         position.updatePositionOpen(newSellOrder);

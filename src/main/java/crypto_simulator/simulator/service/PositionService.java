@@ -40,7 +40,9 @@ public class PositionService {
         //TODO : how to deal with the running server when new tickers added?
     }
 
-    public Position findByMemberIdTicker(Long memberId, Ticker ticker){
-        return positionRepository.findByMemberIdTicker(memberId, ticker);
+    public Position findByMemberIdTicker(Member member, Ticker ticker){
+        System.out.println("position service");
+        System.out.println("memberId : "+ member.getId() + " ticker:"+ticker);
+        return positionRepository.findByMemberIdTicker(member, ticker);
     }
 }

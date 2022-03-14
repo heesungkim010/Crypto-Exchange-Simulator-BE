@@ -39,5 +39,4 @@ public class MemberService {
             throw new IllegalStateException("Already existing userId");
         }
     }
-
 }

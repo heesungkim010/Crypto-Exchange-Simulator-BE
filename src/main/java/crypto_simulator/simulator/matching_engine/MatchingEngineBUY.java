@@ -11,6 +11,7 @@ public class MatchingEngineBUY implements Runnable{
     private String ticker;
     private ExternalPriceInfoReceiver priceInfoReceiver;
     private PriceInfoSender priceInfoSender;
+    private Router meToDataCenterRouter;
     //private double curBestBidPrice;
     //private double prevBestBidPrice;
     private double curBestAskPrice;
@@ -23,12 +24,13 @@ public class MatchingEngineBUY implements Runnable{
     private double endIndexPrice;
     private double indexGapPrice;
 
-    public MatchingEngineBUY(String ticker, double[] indexPriceList, Router apiMeRouter,
+    public MatchingEngineBUY(String ticker, double[] indexPriceList,
                              ExternalPriceInfoReceiver externalPriceInfoReceiver,
-                             PriceInfoSender priceInfoSender) throws InterruptedException {
+                             PriceInfoSender priceInfoSender, Router meToDataCenterRouter) throws InterruptedException {
         this.ticker = ticker;
         this.priceInfoReceiver = externalPriceInfoReceiver;
         this.priceInfoSender = priceInfoSender;
+        this.meToDataCenterRouter = meToDataCenterRouter;
 
         //Order ConsumerMe
         this.prevBestAskPrice = -1;

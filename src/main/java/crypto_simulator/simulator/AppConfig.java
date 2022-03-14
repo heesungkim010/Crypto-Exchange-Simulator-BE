@@ -4,8 +4,13 @@ import crypto_simulator.simulator.data_center.DataCenter;
 import crypto_simulator.simulator.matching_engine.*;
 import crypto_simulator.simulator.router.Router;
 import crypto_simulator.simulator.router.RouterManyToOne;
+import crypto_simulator.simulator.service.FilledOrderService;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -17,14 +22,17 @@ import java.util.concurrent.ConcurrentHashMap;
 @Setter @Getter
 public class AppConfig {
     //setting info. tickers.
+
     private ArrayList<String> tickerArray = new ArrayList<String>();
     private List<MatchingEngineBUY> matchingEngineBUYList = new ArrayList<MatchingEngineBUY>();
 
     private int apiMatchingEngineBufferSize = 10000;
+    private int meDataCenterBufferSize = 10000;
     private String[] startingTickersArray = {"btc"};
     private double[][] indexPriceList = { {10000, 100000, 0.5, 180000}, {1000, 10000, 0.05, 180000 }};
     private Map<String, Router> apiMeBUYRouterHashMap;
     private Map<String, PriceInfoSender> priceInfoSenderHashMap;
+    private ApplicationContext ac;
     /*
     private double startIndexPrice;
     private double endIndexPrice;
@@ -37,8 +45,14 @@ public class AppConfig {
     below : init functions + non- init functons
      */
 
+    @Autowired
+    public AppConfig(ApplicationContext applicationContext) throws InterruptedException {
+        this.ac = applicationContext;
+        start();
+    }
 
-    public AppConfig() throws InterruptedException {
+    public void start() throws InterruptedException {
+
         this.apiMeBUYRouterHashMap = new ConcurrentHashMap<>();
         //non-init function
         for (String ticker: startingTickersArray) {
@@ -46,19 +60,24 @@ public class AppConfig {
             this.apiMeBUYRouterHashMap.put(
                     ticker, new RouterManyToOne(this.apiMatchingEngineBufferSize));
             //non-init function
-            this.priceInfoSenderHashMap.put(ticker, initPriceInfoSender(ticker));
         }
 
         int index = 0;
         for (String ticker : tickerArray){
-            ExternalPriceInfoReceiver priceInfoReceiver =
-                    initExternalPriceInfoReceiver(ticker);
+            ExternalPriceInfoReceiver externalPriceInfoReceiver = initExternalPriceInfoReceiver(ticker);
+            PriceInfoSender priceInfoSender= initPriceInfoSender(ticker);
+            Router meToDcRouter = initMeToDataCenterRouter(this.meDataCenterBufferSize);
 
-            MatchingEngineBUY matchingEngineBUY = new MatchingEngineBUY(
-                    ticker, indexPriceList[index++],
-                    this.apiMeBUYRouterHashMap.get(ticker), priceInfoReceiver,
-                    priceInfoSenderHashMap.get(ticker));
-            //non-init function
+            // Init Matching Engine and DataCenter -- > without interface
+            // with interface : ExternalPriceInfoReceiver/ PriceInfoSender / MeToDataCenterRouter
+            MatchingEngineBUY matchingEngineBUY = initMatchingEngineBUY(ticker, indexPriceList[index++],
+                    externalPriceInfoReceiver,
+                    priceInfoSender,
+                    meToDcRouter);
+
+            DataCenter dataCenter = new DataCenter(ac.getBean(FilledOrderService.class),
+                    meToDcRouter, ticker); // ac.getBean
+            //non init-functions end.
 
             ReqConsumerMe reqConsumerMeBUY = initOrderConsumerMeBUY(ticker,
                     matchingEngineBUY, this.apiMeBUYRouterHashMap.get(ticker));
@@ -89,6 +108,20 @@ public class AppConfig {
 
         return new PriceInfoSenderImpl(ticker);
     }
+
+    public Router initMeToDataCenterRouter(int buffersize){
+        return new RouterManyToOne(buffersize);
+    }
+
+    public MatchingEngineBUY initMatchingEngineBUY(String ticker, double[] indexPriceList,
+                                       ExternalPriceInfoReceiver priceInfoReceiver,
+                                       PriceInfoSender priceInfoSender,
+                                       Router meToDataCenterRouter) throws InterruptedException {
+        return new MatchingEngineBUY(ticker, indexPriceList, priceInfoReceiver,
+                priceInfoSender, meToDataCenterRouter);
+    }
+
+
 
     public void putTickerArray(String ticker){
         this.tickerArray.add(ticker);

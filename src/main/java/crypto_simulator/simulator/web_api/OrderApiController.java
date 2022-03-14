@@ -43,7 +43,6 @@ public class OrderApiController {
         2. send the order to the router( apiMeBUYRouterHashMap.get(ticker) )
         3. return opening order result
         */
-
         apiMeBUYRouterHashMap.get("btc").send(request.getNewOrder()); // send order
         return new OrderResponse("111",true);
     }

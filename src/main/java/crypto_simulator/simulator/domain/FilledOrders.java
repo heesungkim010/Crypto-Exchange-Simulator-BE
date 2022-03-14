@@ -8,10 +8,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter
-
 public class FilledOrders {
     @Id
-
     @Column(name = "filled_orders_id")
     private Long id;
 

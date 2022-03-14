@@ -1,6 +1,7 @@
 package crypto_simulator.simulator.matching_engine;
 
 import crypto_simulator.simulator.domain.Order;
+import crypto_simulator.simulator.domain.OrderStatus;
 import crypto_simulator.simulator.router.Router;
 
 import java.util.Map;
@@ -47,8 +48,6 @@ public class MatchingEngineBUY implements Runnable{
             this.priceIndexArrayBuy[i] = new ReservedOrders();
             this.mutexArray[i] = new Semaphore(1, true);
         }
-        Thread threadUpdateAndFill = new Thread(this, "updateAndFill");
-        threadUpdateAndFill.start();
     }
 
     // TODO : init and re-init every 12 hours(because of binance websocket limitation rules)
@@ -81,7 +80,7 @@ public class MatchingEngineBUY implements Runnable{
         mutex.release();
     }
 
-    public boolean cancelOrder(Order order) throws InterruptedException {
+    public void cancelOrder(Order order) throws InterruptedException {
         /*
 
         get ReservedOrders object that matches newOrder's price
@@ -99,12 +98,14 @@ public class MatchingEngineBUY implements Runnable{
         //3. remove [orderId, order] in the hash table.
         ReservedOrders reservedOrdersImpl =
                 this.priceIndexArrayBuy[getIndexOfPriceIndexArray(order.getPrice())];
-        boolean result = reservedOrdersImpl.cancelOrder(order.getId());
-
-        mutex.release();
-        return result;
-        // TODO : need to pass this result to data center!!!
+        boolean has_canceled = reservedOrdersImpl.cancelOrder(order.getId());
+        if(!has_canceled){
+            order.setNewOrderStatus(OrderStatus.FAILED);
+        }
+        //  pass the order to data center!!!
         //  cancel_filled, cancel_failed
+        meToDataCenterRouter.send(order);
+        mutex.release();
 
         /*
         TODO : think of another way to delete order
@@ -145,7 +146,6 @@ public class MatchingEngineBUY implements Runnable{
         */
         mutex.acquire();
         this.curBestAskPrice = priceInfoReceiver.getBestAskPrice();
-        System.out.println(this.curBestAskPrice);
         if (this.curBestAskPrice < this.prevBestAskPrice){
             //fill the order (price : bestAskPrice~prev_bestAskPrice)
             for(int i = getIndexOfPriceIndexArray(this.prevBestAskPrice);
@@ -155,29 +155,32 @@ public class MatchingEngineBUY implements Runnable{
         }
         this.prevBestAskPrice = this.curBestAskPrice;
         this.priceInfoSender.setCurBestAskPrice(this.curBestAskPrice);
+        //System.out.println(this.curBestAskPrice);
         // set price info at PriceInfoSender  --> this will be transmitted to FE by web-socket.
 
         mutex.release();
     }
 
-    public void fillLimitOrders(ReservedOrders reservedOrdersImpl){
+    public void fillLimitOrders(ReservedOrders reservedOrdersImpl) throws InterruptedException {
         /*
         for all orders in hashtable of reservedOrders
             : (1) send the filled limit orders to the data center by router
         erase all the elements in hashtable
          */
         for(Map.Entry<Long, Order> elem : reservedOrdersImpl.getHashMap().entrySet()){
-            //TODO : set router ( ME - Data Center. ManyToONE) ... LIMIT ORDER + MARKET ORDER
+            meToDataCenterRouter.send(elem.getValue());
+            //set router ( ME - Data Center. ManyToONE) ... LIMIT ORDER + MARKET ORDER
         }
         reservedOrdersImpl.getHashMap().clear();
     }
 
-    public void fillMarketOrder(Order filledOrder){
+    public void fillMarketOrder(Order filledOrder) throws InterruptedException {
         /*
         send the filled market order to the data center by router
          */
         filledOrder.setPrice(this.curBestAskPrice); // change the order price to market price.
-        //TODO : set router  ( ME - Data Center. ManyToONE) ... LIMIT ORDER + MARKET ORDER
+        meToDataCenterRouter.send(filledOrder);
+        //set router  ( ME - Data Center. ManyToONE) ... LIMIT ORDER + MARKET ORDER
     }
 
     public int getIndexOfPriceIndexArray(double price){

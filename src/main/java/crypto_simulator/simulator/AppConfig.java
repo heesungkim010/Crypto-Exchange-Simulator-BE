@@ -76,14 +76,21 @@ public class AppConfig {
                     meToDcRouter);
 
             DataCenter dataCenter = new DataCenter(ac.getBean(FilledOrderService.class),
-                    meToDcRouter, ticker); // ac.getBean
+                    meToDcRouter, ticker);
             //non init-functions end.
 
             ReqConsumerMe reqConsumerMeBUY = initOrderConsumerMeBUY(ticker,
                     matchingEngineBUY, this.apiMeBUYRouterHashMap.get(ticker));
 
             Thread threadReqConsume = new Thread(reqConsumerMeBUY, "reqConsumerMeBUY");
+            Thread threadUpdateAndFill = new Thread(matchingEngineBUY, "updateAndFill");
+            Thread threadCheckPriceAndSendPrice = new Thread(priceInfoSender, "checkPriceAndSendPrice");
+            Thread threadFillOrders = new Thread(dataCenter, "fillOrders");
+
             threadReqConsume.start();
+            threadUpdateAndFill.start();
+            threadCheckPriceAndSendPrice.start();
+            threadFillOrders.start();
         /*
         new CurrentPriceBufferImpl(ticker); -- ticker buy/sell --> one per ticker
         new ExternalPriceInfoReceiverImpl(ticker, this.currentPriceBuffer); ticker buy/sell --> one per ticker
@@ -120,8 +127,6 @@ public class AppConfig {
         return new MatchingEngineBUY(ticker, indexPriceList, priceInfoReceiver,
                 priceInfoSender, meToDataCenterRouter);
     }
-
-
 
     public void putTickerArray(String ticker){
         this.tickerArray.add(ticker);

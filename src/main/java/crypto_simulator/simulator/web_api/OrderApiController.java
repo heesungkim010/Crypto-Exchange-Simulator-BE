@@ -3,6 +3,8 @@ package crypto_simulator.simulator.web_api;
 import crypto_simulator.simulator.AppConfig;
 import crypto_simulator.simulator.domain.*;
 import crypto_simulator.simulator.router.Router;
+import crypto_simulator.simulator.service.MemberService;
+import crypto_simulator.simulator.service.PositionService;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +25,15 @@ public class OrderApiController {
     private static AtomicLong atomicLong = new AtomicLong(0);
     private final AppConfig appConfig;
     private Map<String, Router> apiMeBUYRouterHashMap;
+    private MemberService memberService;
+    private PositionService positionService;
 
     @Autowired
     public OrderApiController(AppConfig appConfig) {
         this.appConfig = appConfig;
         this.apiMeBUYRouterHashMap = appConfig.getApiMeBUYRouterHashMap();// ticker, router
+        this.memberService = appConfig.getAc().getBean(MemberService.class);
+        this.positionService = appConfig.getAc().getBean(PositionService.class);
     }
 
     @PostMapping("/api/neworder/buy")
@@ -35,6 +41,7 @@ public class OrderApiController {
         // open new order (BUY, CANCEL_BUY)
         /*
         MAKE BUY ORDER
+        0. update the Member(balance), Position
         1. create new order with request
         2. send the order to the router( apiMeBUYRouterHashMap.get(ticker) )
         3. return opening order result
@@ -43,7 +50,16 @@ public class OrderApiController {
         2. send the order to the router( apiMeBUYRouterHashMap.get(ticker) )
         3. return opening order result
         */
-        apiMeBUYRouterHashMap.get("btc").send(request.getNewOrder()); // send order
+        Order newOrder;
+        if (request.getNewOrderType() == OrderType.BUY){
+            newOrder = request.getNewOrder();
+            memberService.updateUsdBalanceOpen(request.getMemberId(), newOrder);
+            positionService.updatePositionOpen(memberService.findById(request.getMemberId()), newOrder);
+        }else{
+
+        }//TODO : START HERE
+        apiMeBUYRouterHashMap.get("btc").send(newOrder); // send order
+
         return new OrderResponse("111",true);
     }
 
@@ -52,6 +68,7 @@ public class OrderApiController {
         // open new order (SELL, CANCEL_SELL)
         /*
         MAKE SELL ORDER
+        0. update the Member(balance), Position
         1. create new order with request
         2. send the order to the router( apiMeBUYRouterHashMap.get(ticker) )
         3. return opening order result
@@ -99,10 +116,17 @@ public class OrderApiController {
         private double moneyToSpend;
         private double moneyToGet;
 
+        private Long idToCancel; // ONLY FOR CANCEL ORDER
         private Long memberId;
 
         private Order getNewOrder(){
             return new Order(this.ticker, this.newOrderStatus, this.newOrderType,
+                    this.price, this.amount, this.feeRate, this.fee, this.moneyToSpend,
+                    this.moneyToGet, this.memberId);
+        }
+
+        private Order getNewCancelOrder(){
+            return new Order(this.idToCancel, this.ticker, this.newOrderStatus, this.newOrderType,
                     this.price, this.amount, this.feeRate, this.fee, this.moneyToSpend,
                     this.moneyToGet, this.memberId);
         }

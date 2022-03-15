@@ -1,6 +1,7 @@
 package crypto_simulator.simulator.service;
 
 import crypto_simulator.simulator.domain.Member;
+import crypto_simulator.simulator.domain.Order;
 import crypto_simulator.simulator.domain.Position;
 import crypto_simulator.simulator.domain.Ticker;
 import crypto_simulator.simulator.repository.PositionRepository;
@@ -38,6 +39,24 @@ public class PositionService {
         // 1. create Positions of the new tickers : domain Position
         // 2. save the Positions : repository PositionRepository
         //TODO : how to deal with the running server when new tickers added?
+    }
+
+    @Transactional
+    public void updatePositionOpen(Member member, Order order){
+        Position position = findByMemberIdTicker(member, order.getTicker());
+        position.updatePositionOpen(order);
+    }
+
+    @Transactional
+    public void updatePositionFilled(Member member, Order order){
+        Position position = findByMemberIdTicker(member, order.getTicker());
+        position.updatePositionFilled(order);
+    }
+
+    @Transactional
+    public void updatePositionCanceled(Member member, Order order){
+        Position position = findByMemberIdTicker(member, order.getTicker());
+        position.updatePositionCanceled(order);
     }
 
     public Position findByMemberIdTicker(Member member, Ticker ticker){

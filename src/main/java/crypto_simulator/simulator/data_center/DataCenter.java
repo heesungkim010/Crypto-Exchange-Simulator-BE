@@ -82,7 +82,6 @@ public class DataCenter implements Runnable{
         }
     }
 
-
     /*
     filledOrderService : save Filled
     member : updateBalance Open/Filled/Cancelled
@@ -91,58 +90,53 @@ public class DataCenter implements Runnable{
     Position position = positionService.findByMemberIdTicker(savedId, Ticker.BTCUSD);
 
     */
+
     void fillBuyOrder(Order order){
     /*
         filledOrderService : save Filled
-        member : updateBalance Open/Filled/Cancelled
-        position : updatePosition Open/Filled/Cancelled
-         notify the order is filled.
+        memberService : updateBalance Open/Filled/Cancelled
+        positionService : updatePosition Open/Filled/Cancelled
+        notify the order is filled.
      */
-
-        Member member = memberService.findById(order.getMemberId());
-
-        Position position = positionService.findByMemberIdTicker(member, order.getTicker());
+        Long memberId = order.getMemberId();
+        Member member = memberService.findById(memberId);
 
         filledOrderService.saveFilledOrder(order, member);
-        //filledOrderService DONE!
-        //Below transaction does not apply to DB
-        member.updateUsdBalanceFilled(order);
-        position.updatePositionFilled(order);
-        //TODO : TRANSACTION!!!
-        System.out.println("fill buy");
+        memberService.updateUsdBalanceFilled(memberId, order);
+        positionService.updatePositionFilled(member, order);
+        //TODO : NOTIFY THE ORDER IS FILLED
     }
 
     void fillSellOrder(Order order){
-    /*
+    /*  SAME AS fillBuyOrder above.
         filledOrderService : save Filled
-        member : updateBalance Open/Filled/Cancelled
-        position : updatePosition Open/Filled/Cancelled
-         notify the order is filled.
+        memberService : updateBalance Open/Filled/Cancelled
+        positionService : updatePosition Open/Filled/Cancelled
+        notify the order is filled.
      */
-        Member member = memberService.findById(order.getMemberId());
-        Position position = positionService.findByMemberIdTicker(member, order.getTicker());
+        //TODO : CHECK if method works with matching engine_SELL
+        Long memberId = order.getMemberId();
+        Member member = memberService.findById(memberId);
 
         filledOrderService.saveFilledOrder(order, member);
-        member.updateUsdBalanceFilled(order);
-        position.updatePositionFilled(order);
-
-        System.out.println("fill sell");
+        memberService.updateUsdBalanceFilled(memberId, order);
+        positionService.updatePositionFilled(member, order);
+        //TODO : NOTIFY THE ORDER IS FILLED
     }
 
     void fillCancelBuyOrder(Order order){
     /*
 
-        member : updateBalance Open/Filled/Cancelled
-        position : updatePosition Open/Filled/Cancelled
-         notify the order is filled.
+        memberService : updateBalance Open/Filled/Cancelled
+        positionService : updatePosition Open/Filled/Cancelled
+        notify the order is filled.
      */
-        Member member = memberService.findById(order.getMemberId());
-        Position position = positionService.findByMemberIdTicker(member, order.getTicker());
+        Long memberId = order.getMemberId();
+        Member member = memberService.findById(memberId);
 
-        member.updateUsdBalanceCancelled(order);
-        position.updatePositionCancelled(order);
-
-        System.out.println("fill cancel buy");
+        memberService.updateUsdBalanceCanceled(memberId, order);
+        positionService.updatePositionCanceled(member, order);
+        //TODO : NOTIFY THE ORDER IS FILLED(CANCELED)
     }
 
     void fillCancelSellOrder(Order order){
@@ -152,12 +146,12 @@ public class DataCenter implements Runnable{
         position : updatePosition Open/Filled/Cancelled
          notify the order is filled.
      */
-        Member member = memberService.findById(order.getMemberId());
-        Position position = positionService.findByMemberIdTicker(member, order.getTicker());
+        Long memberId = order.getMemberId();
+        Member member = memberService.findById(memberId);
 
-        member.updateUsdBalanceCancelled(order);
-        position.updatePositionCancelled(order);
+        memberService.updateUsdBalanceCanceled(memberId, order);
+        positionService.updatePositionCanceled(member, order);
+        //TODO : NOTIFY THE ORDER IS FILLED(CANCELED)
 
-        System.out.println("fill cancel sell");
     }
 }

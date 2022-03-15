@@ -66,7 +66,7 @@ public class Position {
         }
     }
 
-    public void updatePositionCancelled(Order order) {
+    public void updatePositionCanceled(Order order) {
         if (order.getNewOrderType() == OrderType.CANCEL_BUY) {
             //nothing to do when buy
         } else { // OrderType.CANCEL_SELL

@@ -31,6 +31,7 @@ public class FilledOrderServiceTest {
         Member member = new Member("user1", "1234", 10000, 0);
 
         Long savedId = memberService.join(member);
+        member = memberService.findById(savedId);
         positionService.initiatePosition(member); // finished registration
 
         Order order = new Order(Ticker.BTCUSD, OrderStatus.OPEN, OrderType.BUY,

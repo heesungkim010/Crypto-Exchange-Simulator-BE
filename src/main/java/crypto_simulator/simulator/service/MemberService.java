@@ -1,6 +1,7 @@
 package crypto_simulator.simulator.service;
 
 import crypto_simulator.simulator.domain.Member;
+import crypto_simulator.simulator.domain.Order;
 import crypto_simulator.simulator.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,4 +40,23 @@ public class MemberService {
             throw new IllegalStateException("Already existing userId");
         }
     }
+
+    @Transactional
+    public void updateUsdBalanceOpen(Long memberId, Order order){
+        Member member = findById(memberId);
+        member.updateUsdBalanceOpen(order);
+    }
+
+    @Transactional
+    public void updateUsdBalanceFilled(Long memberId, Order order){
+        Member member = findById(memberId);
+        member.updateUsdBalanceFilled(order);
+    }
+
+    @Transactional
+    public void updateUsdBalanceCanceled(Long memberId, Order order){
+        Member member = findById(memberId);
+        member.updateUsdBalanceCanceled(order);
+    }
+
 }

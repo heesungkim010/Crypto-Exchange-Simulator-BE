@@ -96,9 +96,11 @@ public class MatchingEngineBUY implements Runnable{
         //1. get index of priceIndexArray using price info.
         //2. index -> ReservedOrders object -> hash table
         //3. remove [orderId, order] in the hash table.
+        System.out.println("Me BUY start cancel order");
         ReservedOrders reservedOrdersImpl =
                 this.priceIndexArrayBuy[getIndexOfPriceIndexArray(order.getPrice())];
-        boolean has_canceled = reservedOrdersImpl.cancelOrder(order.getId());
+        boolean has_canceled = reservedOrdersImpl.cancelOrder(order.getIdToCancel());
+        System.out.println("has_canceld : " + has_canceled);
         if(!has_canceled){
             order.setNewOrderStatus(OrderStatus.FAILED);
         }

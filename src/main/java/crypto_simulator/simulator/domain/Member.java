@@ -63,7 +63,7 @@ public class Member {
     }
 
     public void updateUsdBalanceCanceled(Order order){
-        if (order.getNewOrderType() == OrderType.BUY){
+        if (order.getNewOrderType() == OrderType.CANCEL_BUY){
             this.usuableMoney += order.getMoneyToSpend();
             this.curOrderedMoney -= order.getMoneyToSpend();
         }else{ // OrderType.SELL

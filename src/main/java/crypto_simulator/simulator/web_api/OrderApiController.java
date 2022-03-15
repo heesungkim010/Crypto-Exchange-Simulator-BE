@@ -55,9 +55,10 @@ public class OrderApiController {
             newOrder = request.getNewOrder();
             memberService.updateUsdBalanceOpen(request.getMemberId(), newOrder);
             positionService.updatePositionOpen(memberService.findById(request.getMemberId()), newOrder);
-        }else{
 
-        }//TODO : START HERE
+        }else{
+            newOrder = request.getNewCancelOrder();
+        }
         apiMeBUYRouterHashMap.get("btc").send(newOrder); // send order
 
         return new OrderResponse("111",true);

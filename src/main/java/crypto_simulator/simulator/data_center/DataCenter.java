@@ -52,7 +52,7 @@ public class DataCenter implements Runnable{
                         notify the order is canceled.
 
                 2 (cancel_buy, cancel_sell ) * 1 (failed)
-                    --> ignore these two.
+                    --> ignore these two. or notify the order is already filled
                 */
                 Order order = this.meToDataCenterRouter.receive();
 
@@ -65,6 +65,7 @@ public class DataCenter implements Runnable{
                         fillBuyOrder(order);
 
                     }else if(orderType == OrderType.CANCEL_BUY){
+                        System.out.println("data center cancel buy");
                         fillCancelBuyOrder(order);
 
                     }else if(orderType == OrderType.SELL){
@@ -134,6 +135,7 @@ public class DataCenter implements Runnable{
         Long memberId = order.getMemberId();
         Member member = memberService.findById(memberId);
 
+        System.out.println("datacenter fillCancelBuyOrder");
         memberService.updateUsdBalanceCanceled(memberId, order);
         positionService.updatePositionCanceled(member, order);
         //TODO : NOTIFY THE ORDER IS FILLED(CANCELED)

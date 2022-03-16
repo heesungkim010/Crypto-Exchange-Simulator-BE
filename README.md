@@ -4,9 +4,9 @@ Simulates Crypto Trading Exchange System.
 
 [Index]
 
-[A. System Design](#a.-system-sesign)
+[A. System Design](#a-system-design)
 
-[B. Database Design](#b.-database-design)
+[B. Database Design](#b-database-design)
 
 
 # A. System Design

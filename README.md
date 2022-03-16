@@ -8,6 +8,7 @@ Simulates Crypto Trading Exchange System.
 
 [B. Database Design](#B.-Database-Design)
 
+[E. Challenges And My Solution](#E.-Challenges-And-My-Solution)
 
 # A. System Design
 

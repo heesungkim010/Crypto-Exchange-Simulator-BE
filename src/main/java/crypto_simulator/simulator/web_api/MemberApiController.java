@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.NoSuchAlgorithmException;
+
 @RestController
 @Slf4j
 @RequiredArgsConstructor
@@ -19,7 +21,7 @@ public class MemberApiController {
     private final PositionService positionService;
 
     @PostMapping("/api/members")
-    public CreateMemberResponse registerUser(@RequestBody CreateMemberRequest request){ // request received
+    public CreateMemberResponse registerUser(@RequestBody CreateMemberRequest request) throws NoSuchAlgorithmException { // request received
 
         //Create New Member
         // 1. create new member with request

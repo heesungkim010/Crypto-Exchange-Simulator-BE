@@ -12,6 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
 
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class FilledOrderServiceTest {
 
     @Test
     @Rollback(value = false)
-    public void initAndFindMemberIdTicker() {
+    public void initAndFindMemberIdTicker() throws NoSuchAlgorithmException {
         //given
         Member member = new Member("user1", "1234", 10000, 0);
 

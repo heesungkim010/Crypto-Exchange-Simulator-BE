@@ -2,6 +2,13 @@
 
 Simulates Crypto Trading Exchange System.
 
+[Index]
+
+[A. System Design](#A.-System-Design)
+
+[B. Database Design](#B.-Database-Design)
+
+
 # A. System Design
 
 ![crypto_exchange_system_design](https://user-images.githubusercontent.com/63962555/158497586-695edab1-d7a5-4fc1-952f-179a42cff68d.jpg)

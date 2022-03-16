@@ -6,6 +6,9 @@ This is a prototype. This does not use multiple servers, security(authentificati
 
 # A. System Design
 
+![system_design](https://user-images.githubusercontent.com/63962555/158497318-766c6735-c089-42db-8934-4530f355d838.jpg)
+
+
 # B. Database Design
 
 # C. API Design

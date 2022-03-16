@@ -19,7 +19,6 @@ Simulates Crypto Trading Exchange System.
 # C. API Design
 
 # D. Domain/Service/Repository Design
-
 # E. Challenges And My Solution
 
 The followings are the challenges I got in this project and my solutions.

@@ -8,8 +8,7 @@ Simulates Crypto Trading Exchange System.
 - [B. Database Design](#b-database-design)
 - [C. How to implement Matching Engine](#c-how-to-implement-matching-engine)
 - [D. API Design](#d-api-design)
-- [E. Domain/Service/Repository Design](#e-domain-service-repository-design)
-
+- 
 # A. System Design
 
 ![crypto_exchange_system_design](https://user-images.githubusercontent.com/63962555/158497586-695edab1-d7a5-4fc1-952f-179a42cff68d.jpg)
@@ -19,5 +18,3 @@ Simulates Crypto Trading Exchange System.
 # C. How to implement Matching Engine
 
 # D. API Design
-
-# E. Domain/Service/Repository Design

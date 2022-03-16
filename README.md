@@ -4,10 +4,11 @@ Simulates Crypto Trading Exchange System.
 
 [Index]
 
-[A. System Design](#a-system-design)
-
-[B. Database Design](#b-database-design)
-
+- [A. System Design](#a-system-design)
+- [B. Database Design](#b-database-design)
+- [C. How to implement Matching Engine](#c-how-to-implement-matching-engine)
+- [D. API Design](#d-api-design)
+- [E. Domain/Service/Repository Design](#e-domain-service-repository-design)
 
 # A. System Design
 

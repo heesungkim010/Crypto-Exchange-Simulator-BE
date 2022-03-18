@@ -1,9 +1,8 @@
 package crypto_simulator.simulator.service;
 
 import java.util.Collections;
-import java.util.Optional;
 
-import crypto_simulator.exception.DuplicateMemberException;
+import crypto_simulator.simulator.exception.DuplicateMemberException;
 import crypto_simulator.simulator.domain.Authority;
 import crypto_simulator.simulator.domain.User;
 import crypto_simulator.simulator.dto.UserDto;

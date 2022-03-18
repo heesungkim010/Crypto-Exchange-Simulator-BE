@@ -1,4 +1,4 @@
-package crypto_simulator.exception;
+package crypto_simulator.simulator.exception;
 
 // original : https://github.com/SilverNine/spring-boot-jwt-tutorial
 public class DuplicateMemberException extends RuntimeException {

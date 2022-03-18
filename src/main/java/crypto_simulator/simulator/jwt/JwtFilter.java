@@ -15,6 +15,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
+// original : https://github.com/SilverNine/spring-boot-jwt-tutorial
 @Slf4j
 public class JwtFilter extends GenericFilterBean{
 

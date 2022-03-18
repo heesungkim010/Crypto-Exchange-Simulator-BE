@@ -19,6 +19,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.stream.Collectors;
 
+// original : https://github.com/SilverNine/spring-boot-jwt-tutorial
 @Component
 @Slf4j
 public class TokenProvider implements InitializingBean {

@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+// original : https://github.com/SilverNine/spring-boot-jwt-tutorial
 @Component
 public class JwtAccessDeniedHandler implements AccessDeniedHandler{
     @Override

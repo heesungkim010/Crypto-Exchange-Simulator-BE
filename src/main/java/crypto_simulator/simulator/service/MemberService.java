@@ -27,13 +27,24 @@ public class MemberService {
     public Long join(Member member) throws NoSuchAlgorithmException {
         checkDuplicate(member);
         //SHA algo for password
-        final MessageDigest digest = MessageDigest.getInstance("SHA3-256");
-        final byte[] hashbytes = digest.digest(
-                (member.getPassword()+"!gkRg*4Gp*4gaqz&TmapIfQgd").getBytes(StandardCharsets.UTF_8));
-        member.setPassword(bytesToHex(hashbytes));
-
+        member.setPassword( encryptPassword(member.getPassword()) );
         memberRepository.save(member);
         return member.getId();
+    }
+    public Member login(String userId, String password) throws NoSuchAlgorithmException {
+        Member userIdMember = findByUserId(userId);
+        if (encryptPassword(password).equals(userIdMember.getPassword())){ // got matching member
+            return userIdMember;
+        }else{
+            return null;
+        }
+    }
+
+    private String encryptPassword(String password) throws NoSuchAlgorithmException {
+        final MessageDigest digest = MessageDigest.getInstance("SHA3-256");
+        final byte[] hashbytes = digest.digest(
+                (password+"!gkRg*4Gp*4gaqz&TmapIfQgd").getBytes(StandardCharsets.UTF_8));
+        return bytesToHex(hashbytes);
     }
 
     public static String bytesToHex(byte[] bytes) {

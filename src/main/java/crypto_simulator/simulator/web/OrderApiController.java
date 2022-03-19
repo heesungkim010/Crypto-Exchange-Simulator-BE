@@ -1,4 +1,4 @@
-package crypto_simulator.simulator.web_api;
+package crypto_simulator.simulator.web;
 
 import crypto_simulator.simulator.AppConfig;
 import crypto_simulator.simulator.domain.*;

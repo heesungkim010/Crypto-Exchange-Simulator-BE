@@ -7,7 +7,6 @@ import crypto_simulator.simulator.router.RouterManyToOne;
 import crypto_simulator.simulator.service.FilledOrderService;
 import crypto_simulator.simulator.service.MemberService;
 import crypto_simulator.simulator.service.PositionService;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,12 +86,12 @@ public class AppConfig {
             ReqConsumerMe reqConsumerMeBUY = initOrderConsumerMeBUY(ticker,
                     matchingEngineBUY, this.apiMeBUYRouterHashMap.get(ticker));
 
-            Thread threadReqConsume = new Thread(reqConsumerMeBUY, "reqConsumerMeBUY");
+            Thread threadReqConsumer = new Thread(reqConsumerMeBUY, "reqConsumerMeBUY");
             Thread threadUpdateAndFill = new Thread(matchingEngineBUY, "updateAndFill");
             Thread threadCheckPriceAndSendPrice = new Thread(priceInfoSender, "checkPriceAndSendPrice");
             Thread threadFillOrders = new Thread(dataCenter, "fillOrders");
 
-            threadReqConsume.start();
+            threadReqConsumer.start();
             threadUpdateAndFill.start();
             threadCheckPriceAndSendPrice.start();
             threadFillOrders.start();

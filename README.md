@@ -41,8 +41,7 @@ Function3 runs continuously, while function1 and function2 are called when there
 
 The data structures of matching engine are as follows:
 
-![image](https://user-images.githubusercontent.com/63962555/159199314-ac3eba32-21e8-4688-aa51-e9e6d049faec.png)
-
+![image](https://user-images.githubusercontent.com/63962555/159199570-d67d147d-f8bd-44f5-adc9-6b646cdfacc3.png)
 
 The index of the static array on the left corresponds to a price. The element of the array is the pointer of a hash table.
 The hash tables on the right store the orders at a certain price. The orders of the same price are stored in the same hash table.

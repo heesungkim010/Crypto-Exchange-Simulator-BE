@@ -27,7 +27,7 @@ https://en.wikipedia.org/wiki/Order_book
 The x-axis is the unit price, the y-axis is cumulative order depth. Bids (buyers) on the left, asks (sellers) on the right.
 
 
-However, this exchange simulator project does not use orderbook to match the orders. Because the exchage simulator aims to use the price information in the real world, not the orderbook in a small simulator which lacks of volume.
+However, this exchange simulator project does not use orderbook to match the orders. Because the exchange simulator aims to use the price information in the real world, not the orderbook in a small simulator which lacks of volume.
 
 
 Therefore, I need to get the price information from the external exchanges in the real world, and use that information to decide if the orders are filled or not. I used Web Socket to get the price information.

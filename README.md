@@ -22,6 +22,7 @@ A matching engine is a system that matches the order of two sides(buy and sell) 
 <p><a href="https://commons.wikimedia.org/wiki/File:Order_book_depth_chart.gif#/media/File:Order_book_depth_chart.gif"><img src="https://upload.wikimedia.org/wikipedia/commons/1/14/Order_book_depth_chart.gif" alt="Order book depth chart.gif"></a><br>By &lt;a href="//commons.wikimedia.org/wiki/User:Kjerish" title="User:Kjerish"&gt;Kjerish&lt;/a&gt; - &lt;span class="int-own-work" lang="en"&gt;Own work&lt;/span&gt;, <a href="https://creativecommons.org/licenses/by-sa/4.0" title="Creative Commons Attribution-Share Alike 4.0">CC BY-SA 4.0</a>, <a href="https://commons.wikimedia.org/w/index.php?curid=73830065">Link</a></p>
 The x-axis is the unit price, the y-axis is cumulative order depth. Bids (buyers) on the left, asks (sellers) on the right.
 
+
 However, this exchange simulator project does not use orderbook to match the orders. Because the exchage simulator aims to use the price information in the real world, not the orderbook in a small simulator which lacks of volume.
 
 

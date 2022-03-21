@@ -39,7 +39,7 @@ Therefore, I need to get the price information from the external exchanges in th
 3. fill the reserved the order and update the price of trading system simulator. (fill and set price)
 Function3 runs continuously, while function1 and function2 are called when there is an transmitted order.
 
-The data structures of matching engine are as follows:
+The data structures of the matching engine are as follows:
 
 ![image](https://user-images.githubusercontent.com/63962555/159199570-d67d147d-f8bd-44f5-adc9-6b646cdfacc3.png)
 

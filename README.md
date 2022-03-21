@@ -98,7 +98,7 @@ Now, the three functions I mentioned above work as follows:
  
  host : localhost
  
- number of requests/minute : 500
+ number of requests per minute : 500
  
  order type : BUY for reserved price
 

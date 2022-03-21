@@ -18,7 +18,8 @@ As I used a single back-end server for this project, the “router” in the dig
 
 # B. Matching Engine Implementation
 
-A matching engine is a system that matches the order of two sides(buy and sell) and makes a deal for both sides. Matching engines in exchanges use orderbooks to fill the order. An orderbook is the list of order that trading systems use to record the interest of buyers and sellers in a particular financial instrument.
+A matching engine is a system that matches the order of two sides(buy and sell) and makes a deal for both sides. Matching engines in exchanges use orderbooks to fill the order. An orderbook is the list of order that trading systems use to record the interest of buyers and sellers in a particular financial instrument. An orderbook is as follows :
+<p><a href="https://commons.wikimedia.org/wiki/File:Order_book_depth_chart.gif#/media/File:Order_book_depth_chart.gif"><img src="https://upload.wikimedia.org/wikipedia/commons/1/14/Order_book_depth_chart.gif" alt="Order book depth chart.gif"></a><br>By &lt;a href="//commons.wikimedia.org/wiki/User:Kjerish" title="User:Kjerish"&gt;Kjerish&lt;/a&gt; - &lt;span class="int-own-work" lang="en"&gt;Own work&lt;/span&gt;, <a href="https://creativecommons.org/licenses/by-sa/4.0" title="Creative Commons Attribution-Share Alike 4.0">CC BY-SA 4.0</a>, <a href="https://commons.wikimedia.org/w/index.php?curid=73830065">Link</a></p>
 
 
 However, this exchange simulator project does not use orderbook to match the orders. Because the exchage simulator aims to use the price information in the real world, not the orderbook in a small simulator which lacks of volume.

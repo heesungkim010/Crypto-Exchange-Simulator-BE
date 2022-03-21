@@ -13,6 +13,9 @@ Simulates Crypto Trading Exchange System.
 
 ![crypto_exchange_system_design](https://user-images.githubusercontent.com/63962555/158497586-695edab1-d7a5-4fc1-952f-179a42cff68d.jpg)
 
+I used a single back-end server for this project, the “router” in the digram above is a thread-to-thread router. The router I used is at https://github.com/heesungkim010/producer-consumer-router.
+
+
 # B. Matching Engine Implementation
 
 A matching engine is a system that matches the order of two sides(buy and sell) and makes a deal for both sides. Matching engines in exchanges use orderbooks to fill the order. An orderbook is the list of order that trading systems use to record the interest of buyers and sellers in a particular financial instrument.
@@ -39,15 +42,15 @@ The data structures of matching engine are as follows:
 The index of the static array on the left corresponds to a price. The element of the array is the pointer of a hash table.
 The hash tables on the right store the orders at a certain price. The orders of the same price are stored in the same hash table.
 Now, the three functions I mentioned above work as follows:
-1. open a new order(buy, sell)
+1. open a new order(buy, sell)   
 1_1. Check the current price of simulator.    
 1_2. Reserve the order, or fill the order at market price according to the price of the order.    
 1_3. When reserving an order, get the index of the array by the price and access the hash table to add the order.    
-2. cancel an order(cancel_buy, cancel_sell)
+2. cancel an order(cancel_buy, cancel_sell)   
 2_1. Get the index of the array by the price and access the hash table    
 2_2. If the order id to cancel is in the hash table, delete the order from the hash table. If not, the order is already filled.    
 
-3. fill the reserved the order and set the price of trading system simulator. (fill and set price)   
+3. fill the reserved the order and set the price of trading system simulator. (fill and set price)     
 3_1. Update the current price of the external exchange.    
 3_2. Now there are two kinds of prices. One is the current price(the very last updated price), and the other is previous price(the second last updated price)    
 3_3. Fill the orders of prices between the current price and the previous price. Get the indexes of the array and fill all the orders in the hash tables.   

@@ -67,18 +67,21 @@ Now, the three functions I mentioned above work as follows:
  
  Let's say there are N orders reserved at a certain price.
 1. open a new order(buy, sell) 
+
    As the index of the static array can be directly calculated by the price of the order, I can get the index of the array in O(1).
    
    As the element of the array stores the pointer of the hash table, I can open new order(add in hash table) in O(1).
    
    --> O(1) x O(1) = O(1)
 2. cancel an order(cancel_buy, cancel_sell)
+
    As the index of the static array can be directly calculated by the price of the order, I can get the index of the array in O(1).
    
    As the element of the array stores the pointer of the hash table, I can cancel an order(delete in hash table) in O(1).
    
    --> O(1) x O(1) = O(1)
-4. fill the reserved the orders and update the price of trading system simulator. (fill and set price)
+3. fill the reserved the orders and update the price of trading system simulator. (fill and set price)
+
     As the index of the static array can be directly calculated by the price of the order, I can get the index of the array in O(1).
  
     As there are N orders reserved at a certain price in a hash table, the time complexity of filling all N orders is O(N).

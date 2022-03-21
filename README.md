@@ -17,7 +17,7 @@ As I used a single back-end server for this project, the “router” in the dig
 
 
 # B. Matching Engine Implementation
-The two biggest problems encountered when implementing the matching engine are 1. Performance(Time complexity) and 2. Synchronization. 
+The two biggest problems encountered when implementing the matching engine are 1. Time complexity and 2. Synchronization. 
 
 A matching engine is a system that matches the order of two sides(buy and sell) and makes a deal for both sides. Matching engines in exchanges use orderbooks to fill the order. An orderbook is the list of order that trading systems use to record the interest of buyers and sellers in a particular financial instrument. An orderbook is as follows :
 

@@ -66,7 +66,7 @@ Now, the three functions I mentioned above work as follows:
 ### 1. Time complexity
  I’ve also considered some other options using dynamic array, linked list, trees(red-black tree, b+ tree). However, the data structure above was best in time complexity. 
  
- Let's say there are N orders reserved at a certain price.
+ Let's say there are M distinct reserved prices and N orders reserved at a certain price.
 1. open a new order(buy, sell) 
 
    As the index of the static array can be directly calculated by the price of the order, I can get the index of the array in O(1).

@@ -59,7 +59,7 @@ Now, the three functions I mentioned above work as follows:
 3_1. Check the current price of the external exchange which is already received by web-socket and stored in an object.    
 3_2. Now there are two kinds of prices. One is the current price(the very last updated price), and the other is previous price(the second last updated price)    
 3_3. Fill the orders of prices between the current price and the previous price. Get the indexes of the array and fill all the orders in the hash tables.   
-3-4. Update the current price of trading system simulator.
+3-4. Update the current price of trading system simulator which will be transmitted to a front-end server.
 
  I’ve also considered some other options using dynamic array, linked list, trees(red-black tree, b+ tree). However, the data structure above was best in time complexity. 
 

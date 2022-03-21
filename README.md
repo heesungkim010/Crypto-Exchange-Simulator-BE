@@ -17,6 +17,7 @@ As I used a single back-end server for this project, the “router” in the dig
 
 
 # B. Matching Engine Implementation
+The two biggest problems encountered when implementing the matching engine are 1. Performance(Time complexity) and 2. Synchronization. 
 
 A matching engine is a system that matches the order of two sides(buy and sell) and makes a deal for both sides. Matching engines in exchanges use orderbooks to fill the order. An orderbook is the list of order that trading systems use to record the interest of buyers and sellers in a particular financial instrument. An orderbook is as follows :
 
@@ -33,7 +34,6 @@ Therefore, I need to get the price information from the external exchanges in th
 
  The Matching Engine has 3 functions.
 
-
 1. open a new order(buy, sell) 
 2. cancel an order(cancel_buy, cancel_sell)
 3. fill the reserved the orders and update the price of trading system simulator. (fill and set price)
@@ -49,7 +49,8 @@ Now, the three functions I mentioned above work as follows:
 1. open a new order(buy, sell)   
 1_1. Check the current price of simulator.    
 1_2. Reserve the order, or fill the order at market price according to the price of the order.    
-1_3. When reserving an order, get the index of the array by the price and access the hash table to add the order.    
+1_3. When reserving an order, get the index of the array by the price and access the hash table to add the order.
+
 2. cancel an order(cancel_buy, cancel_sell)   
 2_1. Get the index of the array by the price and access the hash table    
 2_2. If the order id to cancel is in the hash table, delete the order from the hash table. If not, the order is already filled.    
@@ -60,8 +61,36 @@ Now, the three functions I mentioned above work as follows:
 3_3. Fill the orders of prices between the current price and the previous price. Get the indexes of the array and fill all the orders in the hash tables.   
 3-4. Update the current price of trading system simulator which will be transmitted to a front-end server.
 
+### 1. Time complexity
  Each ticker has 2 Matching Engines(One for buy, cancel_buy orders, and the other for sell, cancel_sell orders). So if there are 3 tickers, there are 6 Matching Engines in total.
  I’ve also considered some other options using dynamic array, linked list, trees(red-black tree, b+ tree). However, the data structure above was best in time complexity. 
+ 
+ Let's say there are N orders reserved at a certain price.
+1. open a new order(buy, sell) 
+   As the index of the static array can be directly calculated by the price of the order, I can get the index of the array in O(1).
+   
+   As the element of the array stores the pointer of the hash table, I can open new order(add in hash table) in O(1).
+   
+   --> O(1) x O(1) = O(1)
+2. cancel an order(cancel_buy, cancel_sell)
+   As the index of the static array can be directly calculated by the price of the order, I can get the index of the array in O(1).
+   
+   As the element of the array stores the pointer of the hash table, I can cancel an order(delete in hash table) in O(1).
+   
+   --> O(1) x O(1) = O(1)
+4. fill the reserved the orders and update the price of trading system simulator. (fill and set price)
+    As the index of the static array can be directly calculated by the price of the order, I can get the index of the array in O(1).
+ 
+    As there are N orders reserved at a certain price in a hash table, the time complexity of filling all N orders is O(N).
+ 
+   --> O(1) X O(N) = O(N)
+
+
+### 2. Synchronization problem
+ The other issue than the time complexity is the synchronization problem. This is because the the functions above share the same data structures and the current price of the simulator is determined at function3(3_4). At first I thought providing mutual exclusions on the unit of each index of the array would be enough. However as the current price is determined at function3(3_4), I had to provide mutual exclusions on the unit of each funcions(1,2,3).
+ 
+ This is quite dissatifying 
+
 
 # C. Database Design
 

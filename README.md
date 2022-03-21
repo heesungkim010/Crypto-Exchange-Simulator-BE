@@ -61,8 +61,9 @@ Now, the three functions I mentioned above work as follows:
 3_3. Fill the orders of prices between the current price and the previous price. Get the indexes of the array and fill all the orders in the hash tables.   
 3-4. Update the current price of trading system simulator which will be transmitted to a front-end server.
 
-### 1. Time complexity
  Each ticker has 2 Matching Engines(One for buy, cancel_buy orders, and the other for sell, cancel_sell orders). So if there are 3 tickers, there are 6 Matching Engines in total.
+ 
+### 1. Time complexity
  I’ve also considered some other options using dynamic array, linked list, trees(red-black tree, b+ tree). However, the data structure above was best in time complexity. 
  
  Let's say there are N orders reserved at a certain price.

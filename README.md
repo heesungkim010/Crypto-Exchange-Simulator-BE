@@ -55,7 +55,7 @@ Now, the three functions I mentioned above work as follows:
 2_1. Get the index of the array by the price and access the hash table    
 2_2. If the order id to cancel is in the hash table, delete the order from the hash table. If not, the order is already filled.    
 
-3. fill the reserved the order and set the price of trading system simulator. (fill and set price)     
+3. fill the reserved the order and update the price of trading system simulator. (fill and set price)     
 3_1. Check the current price of the external exchange which is already received by web-socket and stored in an object.    
 3_2. Now there are two kinds of prices. One is the current price(the very last updated price), and the other is previous price(the second last updated price)    
 3_3. Fill the orders of prices between the current price and the previous price. Get the indexes of the array and fill all the orders in the hash tables.   

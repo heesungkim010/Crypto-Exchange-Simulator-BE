@@ -36,7 +36,7 @@ Therefore, I need to get the price information from the external exchanges in th
 
 1. open a new order(buy, sell) 
 2. cancel an order(cancel_buy, cancel_sell)
-3. fill the reserved the order and set the price of trading system simulator. (fill and set price)
+3. fill the reserved the order and update the price of trading system simulator. (fill and set price)
 Function3 runs continuously, while function1 and function2 are called when there is an transmitted order.
 
 The data structures of matching engine are as follows:
@@ -59,6 +59,7 @@ Now, the three functions I mentioned above work as follows:
 3_1. Update the current price of the external exchange.    
 3_2. Now there are two kinds of prices. One is the current price(the very last updated price), and the other is previous price(the second last updated price)    
 3_3. Fill the orders of prices between the current price and the previous price. Get the indexes of the array and fill all the orders in the hash tables.   
+3-4. Update the current price of trading system simulator.
 
  I’ve also considered some other options using dynamic array, linked list, trees(red-black tree, b+ tree). However, the data structure above was best in time complexity. 
 

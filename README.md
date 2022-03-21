@@ -6,7 +6,7 @@ Simulates Crypto Trading Exchange System.
 
 - [A. System Design](#a-system-design)
 - [B. Database Design](#b-database-design)
-- [C. How to implement Matching Engine](#c-how-to-implement-matching-engine)
+- [C. Matching Engine Implementation](#c-how-to-implement-matching-engine)
 - [D. API Design](#d-api-design)
 
 # A. System Design
@@ -15,6 +15,6 @@ Simulates Crypto Trading Exchange System.
 
 # B. Database Design
 
-# C. How to implement Matching Engine
+# C. Matching Engine Implementation
 
 # D. API Design

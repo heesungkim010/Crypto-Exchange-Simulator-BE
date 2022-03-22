@@ -13,8 +13,8 @@ Simulates Crypto Trading Exchange System.
 
 ![crypto_exchange_system_design](https://user-images.githubusercontent.com/63962555/158497586-695edab1-d7a5-4fc1-952f-179a42cff68d.jpg)
 
+I've got a lot of idea from https://medium.com/@narengowda/stock-exchange-system-design-answered-ad4be1345851 and changed a bit for this project.
 As I used a single back-end server for this project, the “router” in the digram above is a thread-to-thread router. The router I used is at https://github.com/heesungkim010/producer-consumer-router.
-
 
 # B. Matching Engine Implementation
 The two biggest problems encountered when implementing the matching engine are 1. Time complexity and 2. Synchronization. 

@@ -92,7 +92,7 @@ Now, the three functions I mentioned above work as follows:
 
 
 ### 2. Synchronization problem
- The other issue than the time complexity is the synchronization problem. This is because the the functions above share the same data structures and the current price of the simulator is determined at function3(3_4). At first I thought providing mutual exclusions on the unit of each index of the array would be enough. However as the current price is determined at function3(3_4), I had to provide mutual exclusions on the unit of each functions(1,2,3).
+ The other issue than the time complexity is the synchronization problem. This is because the functions above share the same data structures and the current price of the simulator is determined at function3(3_4). At first I thought providing mutual exclusions on the unit of each index of the array would be enough. However as the current price is determined at function3(3_4), I had to provide mutual exclusions on the unit of each functions(1,2,3).
  
 ### 3. Performance
  I performed an experiment by using POSTMAN. 

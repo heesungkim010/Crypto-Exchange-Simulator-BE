@@ -4,6 +4,7 @@ import crypto_simulator.simulator.domain.Order;
 import crypto_simulator.simulator.domain.OrderStatus;
 import crypto_simulator.simulator.router.Router;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
 
@@ -17,9 +18,9 @@ public class MatchingEngineBUY implements Runnable{
     //private double prevBestBidPrice;
     private double curBestAskPrice;
     private double prevBestAskPrice;
+    private ArrayList<Long> arrayList = new ArrayList<>();
 
     private Semaphore mutex;
-    private Semaphore[] mutexArray;
     private ReservedOrders[] priceIndexArrayBuy;
     private double startIndexPrice;
     private double endIndexPrice;
@@ -41,12 +42,10 @@ public class MatchingEngineBUY implements Runnable{
         this.endIndexPrice = indexPriceList[1];
         this.indexGapPrice = indexPriceList[2];
 
-        this.mutexArray = new Semaphore[(int)indexPriceList[3]];
         this.priceIndexArrayBuy = new ReservedOrders[(int)indexPriceList[3]];
 
         for(int i = 0; i < (int)indexPriceList[3]; i++){
             this.priceIndexArrayBuy[i] = new ReservedOrders();
-            this.mutexArray[i] = new Semaphore(1, true);
         }
     }
 
@@ -80,6 +79,7 @@ public class MatchingEngineBUY implements Runnable{
         mutex.release();
     }
 
+
     public void cancelOrder(Order order) throws InterruptedException {
         /*
 
@@ -96,11 +96,9 @@ public class MatchingEngineBUY implements Runnable{
         //1. get index of priceIndexArray using price info.
         //2. index -> ReservedOrders object -> hash table
         //3. remove [orderId, order] in the hash table.
-        System.out.println("Me BUY start cancel order");
         ReservedOrders reservedOrdersImpl =
                 this.priceIndexArrayBuy[getIndexOfPriceIndexArray(order.getPrice())];
         boolean has_canceled = reservedOrdersImpl.cancelOrder(order.getIdToCancel());
-        System.out.println("has_canceld : " + has_canceled);
         if(!has_canceled){
             order.setNewOrderStatus(OrderStatus.FAILED);
         }

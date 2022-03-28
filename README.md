@@ -37,6 +37,7 @@ Therefore, I need to get the price information from the external exchanges in th
 1. open a new order(buy, sell) 
 2. cancel an order(cancel_buy, cancel_sell)
 3. fill the reserved the orders and update the price of trading system simulator. (fill and set price)
+
 Function3 runs continuously, while function1 and function2 are called when there is an transmitted order.
 
 The data structures of the matching engine are as follows:

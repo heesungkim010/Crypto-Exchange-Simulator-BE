@@ -19,15 +19,7 @@ As I used a single back-end server for this project, the “router” in the dig
 # B. Matching Engine Implementation
 The two biggest problems encountered when implementing the matching engine are 1. Time complexity and 2. Synchronization. 
 
-A matching engine is a system that matches the order of two sides(buy and sell) and makes a deal for both sides. Matching engines in exchanges use orderbooks to fill the order. An orderbook is the list of order that trading systems use to record the interest of buyers and sellers in a particular financial instrument. An orderbook is as follows :
-
-![image](https://user-images.githubusercontent.com/63962555/159198328-78765a52-8a3d-425d-8f98-6ed627f6fee9.png)
-https://en.wikipedia.org/wiki/Order_book
-
-The x-axis is the unit price, the y-axis is cumulative order depth. Bids (buyers) on the left, asks (sellers) on the right.
-
-
-However, this exchange simulator project does not use orderbook to match the orders. Because the exchange simulator aims to use the price information in the real world, not the orderbook in a small simulator which lacks of volume.
+A matching engine is a system that matches the order of two sides(buy and sell) and makes a deal for both sides. Matching engines in exchanges use orderbooks to fill the order. However, this exchange simulator project does not use orderbook to match the orders. Because the exchange simulator aims to use the price information in the real world, not the orderbook in a small simulator which lacks of volume.
 
 
 Therefore, I need to get the price information from the external exchanges in the real world, and use that information to decide if the orders are filled or not. I used Web Socket to get the price information.

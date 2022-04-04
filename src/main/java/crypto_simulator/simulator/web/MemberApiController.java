@@ -20,6 +20,16 @@ public class MemberApiController {
     private final MemberService memberService;
     private final PositionService positionService;
 
+    @GetMapping("/api/members/prac")
+    public CreateMemberResponse prac(){
+        log.info("prac");
+        CreateMemberResponse response = new CreateMemberResponse(
+                "abcde", true);
+
+        //response == { memberId , registrationResult }
+        return response;
+    }
+
     @PostMapping("/api/members/register")
     public CreateMemberResponse registerMember(@RequestBody CreateMemberRequest request) throws NoSuchAlgorithmException { // request received
 
@@ -56,7 +66,6 @@ public class MemberApiController {
         }
 
         //if matches : login success, set session.
-
         HttpSession session = servletRequest.getSession(true);
         // if no session , return new session
         // (false) : if no session, return null

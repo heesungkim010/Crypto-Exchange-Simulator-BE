@@ -4,6 +4,7 @@ import crypto_simulator.simulator.domain.InitialSettings;
 import crypto_simulator.simulator.domain.Member;
 import crypto_simulator.simulator.service.MemberService;
 import crypto_simulator.simulator.service.PositionService;
+import crypto_simulator.simulator.web.login.SessionConst;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,16 +20,6 @@ import java.security.NoSuchAlgorithmException;
 public class MemberApiController {
     private final MemberService memberService;
     private final PositionService positionService;
-
-    @GetMapping("/api/members/prac")
-    public CreateMemberResponse prac(){
-        log.info("prac");
-        CreateMemberResponse response = new CreateMemberResponse(
-                "abcde", true);
-
-        //response == { memberId , registrationResult }
-        return response;
-    }
 
     @PostMapping("/api/members/register")
     public CreateMemberResponse registerMember(@RequestBody CreateMemberRequest request) throws NoSuchAlgorithmException { // request received
@@ -67,12 +58,21 @@ public class MemberApiController {
 
         //if matches : login success, set session.
         HttpSession session = servletRequest.getSession(true);
-        // if no session , return new session
-        // (false) : if no session, return null
-        session.setAttribute("loginmember", loginMember);
+        session.setAttribute(SessionConst.LOGIN_MEMBER, loginMember);
         //save session-data
 
         return new LoginMemberResponse(true); //did_login : true
+    }
+
+    @PostMapping("/api/members/logout")
+    public void logoutMember(HttpServletRequest request
+                                           ) throws NoSuchAlgorithmException { // request received
+        HttpSession session = request.getSession(false);
+        log.info("logout check : {}", session);
+        if(session != null) {
+            session.invalidate();
+            log.info("session inval");
+        }
     }
 
     @Data

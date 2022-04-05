@@ -2,8 +2,7 @@ package crypto_simulator.simulator;
 
 import crypto_simulator.simulator.data_center.DataCenter;
 import crypto_simulator.simulator.matching_engine.*;
-import crypto_simulator.simulator.router.Router;
-import crypto_simulator.simulator.router.RouterManyToOne;
+import crypto_simulator.simulator.router.*;
 import crypto_simulator.simulator.service.FilledOrderService;
 import crypto_simulator.simulator.service.MemberService;
 import crypto_simulator.simulator.service.PositionService;
@@ -29,6 +28,7 @@ public class AppConfig {
 
     private int apiMatchingEngineBufferSize = 10000;
     private int meDataCenterBufferSize = 10000;
+    private int meBuyPriceSenderBufferSize = 10000;
     private String[] startingTickersArray = {"btc"};
     private double[][] indexPriceList = { {10000, 100000, 0.5, 180000}, {1000, 10000, 0.05, 180000 }};
     private Map<String, Router> apiMeBUYRouterHashMap;
@@ -55,26 +55,28 @@ public class AppConfig {
     public void start() throws InterruptedException {
 
         this.apiMeBUYRouterHashMap = new ConcurrentHashMap<>();
-        //non-init function
+        // {ticker : router(api-MeBUY }
         for (String ticker: startingTickersArray) {
             putTickerArray(ticker);
             this.apiMeBUYRouterHashMap.put(
                     ticker, new RouterManyToOne(this.apiMatchingEngineBufferSize));
-            //non-init function
         }
 
+        /*
+        Initialize receivers, senders, routers, matching engines, data centers
+        with interface : ExternalPriceInfoReceiver/ PriceInfoSender / MeToDataCenterRouter
+        without interface : matching engine, data center
+        */
         int index = 0;
         for (String ticker : tickerArray){
             ExternalPriceInfoReceiver externalPriceInfoReceiver = initExternalPriceInfoReceiver(ticker);
-            PriceInfoSender priceInfoSender= initPriceInfoSender(ticker);
             Router meToDcRouter = initMeToDataCenterRouter(this.meDataCenterBufferSize);
+            RouterPriceInfo meBuyToPriceSenderRouter = initMeBuyToPriceSenderRouter(this.meBuyPriceSenderBufferSize);
+            PriceInfoSender priceInfoSender= initPriceInfoSender(ticker, meBuyToPriceSenderRouter);
 
-            // Init Matching Engine and DataCenter -- > without interface
-            // with interface : ExternalPriceInfoReceiver/ PriceInfoSender / MeToDataCenterRouter
             MatchingEngineBUY matchingEngineBUY = initMatchingEngineBUY(ticker, indexPriceList[index++],
                     externalPriceInfoReceiver,
-                    priceInfoSender,
-                    meToDcRouter);
+                    meToDcRouter, meBuyToPriceSenderRouter); //matchingEngineBUY has meToPriceSenderRouter
 
             DataCenter dataCenter = new DataCenter(
                     ac.getBean(MemberService.class),
@@ -85,6 +87,7 @@ public class AppConfig {
 
             ReqConsumerMe reqConsumerMeBUY = initOrderConsumerMeBUY(ticker,
                     matchingEngineBUY, this.apiMeBUYRouterHashMap.get(ticker));
+            //finished dependency injection.
 
             Thread threadReqConsumer = new Thread(reqConsumerMeBUY, "reqConsumerMeBUY");
             Thread threadUpdateAndFill = new Thread(matchingEngineBUY, "updateAndFill");
@@ -115,21 +118,21 @@ public class AppConfig {
     }
 
     public PriceInfoSender initPriceInfoSender(
-            String ticker){
-
-        return new PriceInfoSenderImpl(ticker);
+            String ticker, RouterPriceInfo meBuyToPriceSenderRouter){
+        return new PriceInfoSenderImpl(ticker, meBuyToPriceSenderRouter);
     }
 
     public Router initMeToDataCenterRouter(int buffersize){
         return new RouterManyToOne(buffersize);
     }
-
+    public RouterPriceInfo initMeBuyToPriceSenderRouter(int buffersize){
+        return new RouterOneToOnePriceInfo(buffersize);
+    }
     public MatchingEngineBUY initMatchingEngineBUY(String ticker, double[] indexPriceList,
                                        ExternalPriceInfoReceiver priceInfoReceiver,
-                                       PriceInfoSender priceInfoSender,
-                                       Router meToDataCenterRouter) throws InterruptedException {
+                                       Router meToDataCenterRouter, RouterPriceInfo meBuyToPriceSenderRouter) throws InterruptedException {
         return new MatchingEngineBUY(ticker, indexPriceList, priceInfoReceiver,
-                priceInfoSender, meToDataCenterRouter);
+                meToDataCenterRouter, meBuyToPriceSenderRouter);
     }
 
     public void putTickerArray(String ticker){

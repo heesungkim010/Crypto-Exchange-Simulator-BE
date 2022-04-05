@@ -3,6 +3,7 @@ package crypto_simulator.simulator.matching_engine;
 import crypto_simulator.simulator.domain.Order;
 import crypto_simulator.simulator.domain.OrderStatus;
 import crypto_simulator.simulator.router.Router;
+import crypto_simulator.simulator.router.RouterPriceInfo;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -12,8 +13,8 @@ public class MatchingEngineBUY implements Runnable{
 
     private String ticker;
     private ExternalPriceInfoReceiver priceInfoReceiver;
-    private PriceInfoSender priceInfoSender;
     private Router meToDataCenterRouter;
+    private RouterPriceInfo meBuyToPriceSenderRouter;
     //private double curBestBidPrice;
     //private double prevBestBidPrice;
     private double curBestAskPrice;
@@ -28,12 +29,12 @@ public class MatchingEngineBUY implements Runnable{
 
     public MatchingEngineBUY(String ticker, double[] indexPriceList,
                              ExternalPriceInfoReceiver externalPriceInfoReceiver,
-                             PriceInfoSender priceInfoSender, Router meToDataCenterRouter) throws InterruptedException {
+                             Router meToDataCenterRouter,
+                             RouterPriceInfo meBuyToPriceSenderRouter) throws InterruptedException {
         this.ticker = ticker;
         this.priceInfoReceiver = externalPriceInfoReceiver;
-        this.priceInfoSender = priceInfoSender;
         this.meToDataCenterRouter = meToDataCenterRouter;
-
+        this.meBuyToPriceSenderRouter = meBuyToPriceSenderRouter;// only in M.E.BUY
         //Order ConsumerMe
         this.prevBestAskPrice = -1;
         this.mutex = new Semaphore(1, true);
@@ -130,7 +131,7 @@ public class MatchingEngineBUY implements Runnable{
         /*
         lock
         update bestAsk;
-
+        send current price info by websocket(to front-end server).
             if bestAskPrice <= prevBestAskPrice(right before update) :
                 need to fill the order (price : bestAskPrice~prev_bestAskPrice)
             else :
@@ -141,11 +142,12 @@ public class MatchingEngineBUY implements Runnable{
         Fill the all order in the hash tables of the objects
 
         set prevBestAskPrice
-        send current price info by websocket(to front-end server).
         unlock
         */
         mutex.acquire();
         this.curBestAskPrice = priceInfoReceiver.getBestAskPrice();
+        this.meBuyToPriceSenderRouter.send(this.curBestAskPrice);
+        // set price info at PriceInfoSender  --> this will be transmitted to FE by web-socket.
         if (this.curBestAskPrice < this.prevBestAskPrice){
             //fill the order (price : bestAskPrice~prev_bestAskPrice)
             for(int i = getIndexOfPriceIndexArray(this.prevBestAskPrice);
@@ -154,10 +156,6 @@ public class MatchingEngineBUY implements Runnable{
             }
         }
         this.prevBestAskPrice = this.curBestAskPrice;
-        this.priceInfoSender.setCurBestAskPrice(this.curBestAskPrice);
-        //System.out.println(this.curBestAskPrice);
-        // set price info at PriceInfoSender  --> this will be transmitted to FE by web-socket.
-
         mutex.release();
     }
 
@@ -169,7 +167,7 @@ public class MatchingEngineBUY implements Runnable{
          */
         for(Map.Entry<Long, Order> elem : reservedOrdersImpl.getHashMap().entrySet()){
             meToDataCenterRouter.send(elem.getValue());
-            //set router ( ME - Data Center. ManyToONE) ... LIMIT ORDER + MARKET ORDER
+
         }
         reservedOrdersImpl.getHashMap().clear();
     }

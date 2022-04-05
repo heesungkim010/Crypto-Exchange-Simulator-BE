@@ -7,5 +7,5 @@ public interface PriceInfoSender extends Runnable{
     double getCurBestAskPrice();
     void setCurBestAskPrice(double price);
 
-    void checkPriceAndSendPrice();
+    void checkPriceAndSendPrice() throws InterruptedException;
 }

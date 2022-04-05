@@ -20,7 +20,6 @@ public class LogInterceptor implements HandlerInterceptor {
         HttpSession session = request.getSession(false);
         Cookie[] cookies = request.getCookies();
         log.info("session : {}", session);
-        log.info("cookies: {}", cookies);
 
         return true;
     }

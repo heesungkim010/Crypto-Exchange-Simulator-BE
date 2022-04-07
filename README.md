@@ -1,6 +1,6 @@
 # Crypto-Exchange-Simulator-BE
 
-Simulates Crypto Trading Exchange System(Back-end Server).
+Simulates Crypto Trading Exchange System(back-end Server).
 
 The front-end server is at https://github.com/heesungkim010/Crypto-Exchange-Simulator-FE
 

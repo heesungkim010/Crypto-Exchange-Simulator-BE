@@ -16,10 +16,8 @@ public class LogInterceptor implements HandlerInterceptor {
                              Object handler) throws Exception {
 
         String requestURI = request.getRequestURI();
-        log.info("prehandle...{}", requestURI);
         HttpSession session = request.getSession(false);
         Cookie[] cookies = request.getCookies();
-        log.info("session : {}", session);
 
         return true;
     }

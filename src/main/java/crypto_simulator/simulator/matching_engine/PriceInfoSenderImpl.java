@@ -3,7 +3,10 @@ package crypto_simulator.simulator.matching_engine;
 import crypto_simulator.simulator.router.RouterPriceInfo;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.websocket.server.ServerEndpoint;
+
 @Slf4j
+@ServerEndpoint("/websocket")
 public class PriceInfoSenderImpl implements PriceInfoSender, Runnable{
     private String ticker;
     private double curBestAskPrice;
@@ -20,6 +23,8 @@ public class PriceInfoSenderImpl implements PriceInfoSender, Runnable{
         this.prevBestBidPrice = 0;
         this.meBuyToPriceSenderRouter = meBuyToPriceSenderRouter;
     }
+
+
 
     @Override
     public void run() {
@@ -42,7 +47,6 @@ public class PriceInfoSenderImpl implements PriceInfoSender, Runnable{
         if( curBestAskPrice != prevBestAskPrice ){
             // found diff
             // TODO : send price info to FE server.
-            log.info("curprice : {}", curBestAskPrice);
             this.prevBestAskPrice = this.curBestAskPrice; // set prev as cur price
         }
     }

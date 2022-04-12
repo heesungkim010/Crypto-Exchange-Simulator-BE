@@ -19,10 +19,7 @@ As I used a single back-end server for this project, the “router” in the dia
 I've got a lot of idea from https://medium.com/@narengowda/stock-exchange-system-design-answered-ad4be1345851 and changed a bit for this project.
 
 # B. Matching Engine Implementation
-The two biggest problems encountered when implementing the matching engine are 1. Time complexity and 2. Synchronization. 
-
 A matching engine is a system that matches the order of two sides(buy and sell) and makes a deal for both sides. Matching engines in exchanges use orderbooks to fill the order. However, this exchange simulator project does not use orderbook to match the orders. Because the exchange simulator aims to use the price information in the real world, not the orderbook in a small simulator which lacks of volume.
-
 
 Therefore, I need to get the price information from the external exchanges in the real world, and use that information to decide if the orders are filled or not. I used Web Socket to get the price information.
 
@@ -57,6 +54,8 @@ Now, the three functions I mentioned above work as follows:
 3-4. Update the current price of trading system simulator which will be transmitted to a front-end server.
 
  Each ticker has 2 Matching Engines(One for buy, cancel_buy orders, and the other for sell, cancel_sell orders). So if there are 3 tickers, there are 6 Matching Engines in total.
+ 
+The two biggest problems encountered when implementing the matching engine are 1. Time complexity and 2. Synchronization. 
  
 ### 1. Time complexity
  I’ve also considered some other options using dynamic array, linked list, trees(red-black tree, b+ tree). However, the data structure above was best in time complexity. 

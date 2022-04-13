@@ -2,6 +2,8 @@
 
 Simulates Crypto Trading Exchange System(backend server).
 
+Used java, Spring, Spring Boot, MySQL, Cassandra.
+
 The frontend server is at https://github.com/heesungkim010/Crypto-Exchange-Simulator-FE
 
 [Index]

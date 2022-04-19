@@ -58,7 +58,7 @@ public class MemberApiController {
 
         //if matches : login success, set session.
         HttpSession session = servletRequest.getSession(true);
-        session.setAttribute(SessionConst.LOGIN_MEMBER, loginMember);
+        session.setAttribute(SessionConst.LOGIN_MEMBER, loginMember.getUserId());// TODO : id or not
         //save session-data
 
         return new LoginMemberResponse(true); //did_login : true

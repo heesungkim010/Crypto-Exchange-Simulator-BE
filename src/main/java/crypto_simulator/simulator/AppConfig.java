@@ -10,7 +10,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -55,7 +54,7 @@ public class AppConfig {
     public void start() throws InterruptedException {
 
         this.apiMeBUYRouterHashMap = new ConcurrentHashMap<>();
-        // {ticker : router(api-MeBUY }
+        // {ticker : router(api-MeBUY) }
         for (String ticker: startingTickersArray) {
             putTickerArray(ticker);
             this.apiMeBUYRouterHashMap.put(
@@ -99,6 +98,7 @@ public class AppConfig {
             threadCheckPriceAndSendPrice.start();
             threadFillOrders.start();
         /*
+        Result
         new CurrentPriceBufferImpl(ticker); -- ticker buy/sell --> one per ticker
         new ExternalPriceInfoReceiverImpl(ticker, this.currentPriceBuffer); ticker buy/sell --> one per ticker
         OrderConsumerMe;  ticker buy one  ticker sell one. --. two per ticker

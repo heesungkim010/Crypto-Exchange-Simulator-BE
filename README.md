@@ -57,6 +57,10 @@ Now, the three functions I mentioned above work as follows:
 
  Each ticker has 2 Matching Engines(One for buy, cancel_buy orders, and the other for sell, cancel_sell orders). So if there are 3 tickers, there are 6 Matching Engines in total.
  
+ The detailed system design around the matching engines per ticker is as follows:
+ 
+ ![ME_detail](https://user-images.githubusercontent.com/63962555/164009941-7ecf5d07-efde-4793-aa78-ad689508812b.jpg)
+ 
 The two biggest problems encountered when implementing the matching engine are 1. Time complexity and 2. Synchronization. 
  
 ### 1. Time complexity

@@ -25,6 +25,12 @@ A matching engine is a system that matches the order of two sides(buy and sell) 
 
 Therefore, I need to get the price information from the external exchanges in the real world, and use that information to decide if the orders are filled or not. I used Web Socket to get the price information.
 
+ Each ticker has 2 Matching Engines(One for buy, cancel_buy orders, and the other for sell, cancel_sell orders). So if there are 3 tickers, there are 6 Matching Engines in total.
+ 
+ The detailed system design around the matching engines per ticker is as follows:
+ 
+ ![ME_detail](https://user-images.githubusercontent.com/63962555/164009941-7ecf5d07-efde-4793-aa78-ad689508812b.jpg)
+
  The Matching Engine has 3 functions.
 
 1. open a new order(buy, sell) 
@@ -54,12 +60,6 @@ Now, the three functions I mentioned above work as follows:
 3_2. Now there are two kinds of prices. One is the current price(the very last updated price), and the other is previous price(the second last updated price)    
 3_3. Fill the orders of prices between the current price and the previous price. Get the indexes of the array and fill all the orders in the hash tables.   
 3-4. Update the current price of trading system simulator which will be transmitted to a front-end server.
-
- Each ticker has 2 Matching Engines(One for buy, cancel_buy orders, and the other for sell, cancel_sell orders). So if there are 3 tickers, there are 6 Matching Engines in total.
- 
- The detailed system design around the matching engines per ticker is as follows:
- 
- ![ME_detail](https://user-images.githubusercontent.com/63962555/164009941-7ecf5d07-efde-4793-aa78-ad689508812b.jpg)
  
 The two biggest problems encountered when implementing the matching engine are 1. Time complexity and 2. Synchronization. 
  

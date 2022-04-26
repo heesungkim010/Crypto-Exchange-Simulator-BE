@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
         sequenceName = "FILLED_SEQ",
         initialValue = 1,
         allocationSize =50 )
-public class FilledOrders {
+public class FilledOrder {
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE,
             generator = "FILLED_SEQ_GENERATOR")
     @Column(name = "filled_orders_id")
@@ -39,11 +39,11 @@ public class FilledOrders {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    private Member memberInFilledOrders;
+    private Member memberInFilledOrder;
 
-    public static FilledOrders createFilledOrder(Order order, Member newMember){
+    public static FilledOrder createFilledOrder(Order order, Member newMember){
         //TODO: think of another way of cloning object without one~two varible
-        FilledOrders filledOrder = new FilledOrders();
+        FilledOrder filledOrder = new FilledOrder();
 
         filledOrder.setTicker(order.getTicker());
         filledOrder.setFilledOrderStatus(order.getNewOrderStatus());
@@ -58,7 +58,7 @@ public class FilledOrders {
         filledOrder.setMoneyToGet(order.getMoneyToGet());
         filledOrder.setFilledOrderDate(order.getOpenedOrderDate());
 
-        filledOrder.setMemberInFilledOrders(newMember);
+        filledOrder.setMemberInFilledOrder(newMember);
 
         return filledOrder;
     }

@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static crypto_simulator.simulator.domain.FilledOrders.*;
+import static crypto_simulator.simulator.domain.FilledOrder.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -22,14 +22,14 @@ public class FilledOrderService {
         // save filled order when filled.
         // 1. create FilledOrder object : domain FilledOrder
         // 2. save the object. : respository FilledOrderRepository
-        FilledOrders filledOrders = createFilledOrder(order, member);
-        filledOrders.setMemberInFilledOrders(member);
-        filledOrderRepository.saveFilledOrder(filledOrders);
+        FilledOrder filledOrder = createFilledOrder(order, member);
+        filledOrder.setMemberInFilledOrder(member);
+        filledOrderRepository.saveFilledOrder(filledOrder);
         //TODO : check if (1) using cascade or
         // (2) using Position[] and pass to repository would be better
     }
 
-    public List<FilledOrders> findByMember(Member member){
+    public List<FilledOrder> findByMember(Member member){
         return filledOrderRepository.findByMember(member);
     }
 }

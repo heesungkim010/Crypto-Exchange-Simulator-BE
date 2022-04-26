@@ -30,7 +30,7 @@ public class Member {
     private double curOrderedMoney;
 
     @OneToMany(mappedBy = "memberInFilledOrders")
-    private List<FilledOrders> filledOrders = new ArrayList<>();
+    private List<FilledOrder> filledOrders = new ArrayList<>();
 
     @OneToMany(mappedBy = "memberInPosition")
     private List<Position> Positions = new ArrayList<>();

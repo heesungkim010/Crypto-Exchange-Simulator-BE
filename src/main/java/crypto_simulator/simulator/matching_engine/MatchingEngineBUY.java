@@ -53,9 +53,6 @@ public class MatchingEngineBUY implements Runnable{
     // TODO : init and re-init every 12 hours(because of binance websocket limitation rules)
     //       re-init when websocket error
 
-    // currentPriceBuffer.getBestBidPrice()
-    // currentPriceBuffer.getBestAskPrice()
-
     public void openOrder(Order order) throws InterruptedException {
         /*
         order type(BUY)

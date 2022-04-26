@@ -13,7 +13,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.transaction.Transactional;
 
 import java.security.NoSuchAlgorithmException;
-import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -58,9 +57,9 @@ public class FilledOrderServiceTest {
         position.updatePositionFilled(newSellOrder);
 
         //when
-        List<FilledOrders> filledOrdersList = filledOrderService.findByMember(member);
+        List<FilledOrder> filledOrderList = filledOrderService.findByMember(member);
 
         //then
-        Assertions.assertEquals(filledOrdersList.size(), 2);
+        Assertions.assertEquals(filledOrderList.size(), 2);
     }
 }

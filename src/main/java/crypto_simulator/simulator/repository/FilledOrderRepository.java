@@ -1,6 +1,6 @@
 package crypto_simulator.simulator.repository;
 
-import crypto_simulator.simulator.domain.FilledOrders;
+import crypto_simulator.simulator.domain.FilledOrder;
 import crypto_simulator.simulator.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -13,13 +13,13 @@ import java.util.List;
 public class FilledOrderRepository {
     private final EntityManager em;
 
-    public void saveFilledOrder(FilledOrders filledOrder){
+    public void saveFilledOrder(FilledOrder filledOrder){
         em.persist(filledOrder);
     }
 
-    public List<FilledOrders> findByMember(Member member){
+    public List<FilledOrder> findByMember(Member member){
         //TODO : LAZY LOADING
-        return em.createQuery("select fo from FilledOrders fo where fo.memberInFilledOrders = :member", FilledOrders.class)
+        return em.createQuery("select fo from FilledOrders fo where fo.memberInFilledOrders = :member", FilledOrder.class)
                 .setParameter("member", member)
                 .getResultList();
     }

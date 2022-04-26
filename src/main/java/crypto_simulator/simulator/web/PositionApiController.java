@@ -28,7 +28,6 @@ public class PositionApiController {
     public positionTickerResponse getPositionTicker(@PathVariable String ticker,
                       HttpServletRequest request){
         HttpSession session = request.getSession(false);
-        log.info("{}", session);
         if(session == null || session.getAttribute(SessionConst.LOGIN_MEMBER) == null){
             return new positionTickerResponse(false);
         }else{

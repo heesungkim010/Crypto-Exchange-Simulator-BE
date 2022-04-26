@@ -60,8 +60,6 @@ public class PositionService {
     }
 
     public Position findByMemberIdTicker(Member member, Ticker ticker){
-        System.out.println("position service");
-        System.out.println("memberId : "+ member.getId() + " ticker:"+ticker);
         return positionRepository.findByMemberIdTicker(member, ticker);
     }
 }

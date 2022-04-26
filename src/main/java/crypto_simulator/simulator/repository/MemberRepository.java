@@ -16,9 +16,7 @@ public class MemberRepository {
     private final EntityManager em;
 
     public void save(Member member){
-        //System.out.println("before id : " + member.getId());
         em.persist(member);
-        //System.out.println("after id : " + member.getId());
     }
 
     public Member findById(Long id){

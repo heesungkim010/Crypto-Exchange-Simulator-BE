@@ -24,8 +24,6 @@ public class PriceInfoSenderImpl implements PriceInfoSender, Runnable{
         this.meBuyToPriceSenderRouter = meBuyToPriceSenderRouter;
     }
 
-
-
     @Override
     public void run() {
         while(true){

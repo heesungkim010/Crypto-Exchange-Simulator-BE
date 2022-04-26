@@ -5,11 +5,6 @@ import crypto_simulator.simulator.router.Router;
 import crypto_simulator.simulator.service.FilledOrderService;
 import crypto_simulator.simulator.service.MemberService;
 import crypto_simulator.simulator.service.PositionService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
 
 public class DataCenter implements Runnable{
     private MemberService memberService;
@@ -82,15 +77,6 @@ public class DataCenter implements Runnable{
             }
         }
     }
-
-    /*
-    filledOrderService : save Filled
-    member : updateBalance Open/Filled/Cancelled
-    position : updatePosition Open/Filled/Cancelled
-
-    Position position = positionService.findByMemberIdTicker(savedId, Ticker.BTCUSD);
-
-    */
 
     void fillBuyOrder(Order order){
     /*
